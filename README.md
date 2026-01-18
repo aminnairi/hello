@@ -116,4 +116,7 @@ docker compose up -d
 
 ```bash
 docker compose up -d
+docker compose exec node npm i
+docker compose exec node npm -w applications/server run dev
+docker compose exec node npm -w applications/web run dev
 ```
