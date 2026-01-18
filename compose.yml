@@ -1,0 +1,23 @@
+services:
+  web:
+    image: node:25.2.1-alpine3.22
+    user: node
+    working_dir: /home/node
+    tty: true
+    stdin_open: true
+    command: "sh -c 'npm i && npm -w applications/web run dev'"
+    volumes:
+      - .:/home/node
+    ports:
+      - 8001:8001
+  server:
+    image: node:25.2.1-alpine3.22
+    user: node
+    working_dir: /home/node
+    tty: true
+    stdin_open: true
+    command: "sh -c 'npm i && npm -w applications/server run dev'"
+    volumes:
+      - .:/home/node
+    ports:
+      - 8000:8000
