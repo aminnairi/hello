@@ -78,14 +78,8 @@ docker compose up -d
 
 ### Requirements
 
-- [Node.js](https://nodejs.org/)
-- [NPM](https://npmjs.com/)
-
-### Installation
-
-```bash
-npm i
-```
+- [Docker](https://docker.com/)
+- [Docker Compose](https://docker.com/compose)
 
 ### Setup
 
@@ -122,14 +116,8 @@ touch settings.json
 }
 ```
 
-### Server
+### Start
 
 ```bash
-npm -w applications/server run dev
-```
-
-### Web
-
-```bash
-npm -w applications/web run dev
+docker compose up -d
 ```
