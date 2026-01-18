@@ -1,0 +1,35 @@
+{
+  "name": "Hello",
+  "background_color": "#000000",
+  "description": "Dashboard",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "short_name": "Hello",
+  "start_url": "/",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "sizes": "1024x1024",
+      "src": "/icon.png",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "sizes": "1354x1561",
+      "src": "/screenshot-wide.png",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop home screen"
+    },
+    {
+      "sizes": "750x1334",
+      "src": "/screenshot-narrow.png",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mobile home screen"
+    }
+  ]
+}
