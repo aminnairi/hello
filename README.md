@@ -84,10 +84,18 @@ docker compose up -d
 
 - [Docker](https://docker.com/)
 
-#### Start
+#### Start the server
 
 ```bash
-docker run -itp 8000:8000 -v ./settings.json:/home/node/settings.json aminnairi/hello-server:0.1.0
+docker run \
+  -itp 8000:8000 \
+  -v ./settings.json:/home/node/settings.json \
+  aminnairi/hello-server:0.1.0
+```
+
+#### Start the Web
+
+```bash
 docker run -itp 8001:8001 aminnairi/hello-web:0.1.0
 ```
 
