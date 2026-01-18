@@ -81,12 +81,6 @@ docker compose up -d
 - [Docker](https://docker.com/)
 - [Docker Compose](https://docker.com/compose)
 
-### Setup
-
-```bash
-touch settings.json
-```
-
 ```json
 {
   "applications": [
