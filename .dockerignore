@@ -1,0 +1,8 @@
+**/node_modules
+**/dist
+**/.npmrc
+**/.npm
+**/.node_repl_history
+**/Dockerfile
+**/compose.yml
+**/compose.build.yml
