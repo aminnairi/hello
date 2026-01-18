@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "serve --listen tcp://0.0.0.0:8000 --single --no-clipboard --no-port-switching dist"
+    "start": "serve --listen tcp://0.0.0.0:8001 --single --no-clipboard --no-port-switching dist"
   },
   "dependencies": {
     "@aminnairi/rpc-web": "^0.1.0",
