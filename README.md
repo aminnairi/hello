@@ -2,7 +2,7 @@
 
 Self-hosted dashboard
 
-<img style="width: 100px" src="./applications/web/public/screenshot-narrow.png" />
+<img style="width: 300px" src="./applications/web/public/screenshot-narrow.png" />
 
 ## Usage
 
