@@ -6,11 +6,6 @@ Self-hosted dashboard
 
 ## Usage
 
-### Requirements
-
-- [Docker](https://docker.com/)
-- [Docker Compose](https://docker.com/compose)
-
 ### Configuration
 
 ```bash
@@ -46,7 +41,14 @@ touch settings.json
 }
 ```
 
-### Setup
+### With Docker Compose
+
+#### Requirements
+
+- [Docker](https://docker.com/)
+- [Docker Compose](https://docker.com/compose)
+
+#### Setup
 
 ```bash
 touch compose.yml
@@ -70,13 +72,19 @@ services:
       - ./settings.json:/home/node/settings.json
 ```
 
-### Start
+#### Start
 
 ```bash
 docker compose up -d
 ```
 
-### Run with Docker
+### With Docker
+
+#### Requirements
+
+- [Docker](https://docker.com/)
+
+#### Start
 
 ```bash
 docker run -itp 8000:8000 -v ./settings.json:/home/node/settings.json aminnairi/hello-server:0.1.0
