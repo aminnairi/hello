@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "@hello/server",
+  "scripts": {
+    "dev": "rolldown --watch --config rolldown.config.ts"
+  },
+  "dependencies": {
+    "@aminnairi/rpc": "^0.1.0",
+    "@aminnairi/rpc-node": "^0.1.0",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@rollup/plugin-run": "^3.1.0",
+    "@types/node": "^24.10.9",
+    "rolldown": "^1.0.0-beta.60"
+  }
+}
