@@ -2,7 +2,7 @@
 
 Self-hosted dashboard
 
-![Desktop Screenshot](./applications/web/public/screenshot-wide.png)
+![Mobile Screenshot](./applications/web/public/screenshot-narrow.png)
 
 ## Usage
 
