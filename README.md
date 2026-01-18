@@ -2,6 +2,8 @@
 
 Self-hosted dashboard
 
+![Desktop Screenshot](./applications/web/public/screenshot-wide.png)
+
 ## Usage
 
 ### Requirements
