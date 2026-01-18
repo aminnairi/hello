@@ -46,6 +46,10 @@ touch settings.json
 
 ### Setup
 
+```bash
+touch compose.yml
+```
+
 ```yaml
 services:
   hello-web:
@@ -63,6 +67,8 @@ services:
     volumes:
       - ./settings.json:/home/node/settings.json
 ```
+
+### Start
 
 ```bash
 docker compose up -d
