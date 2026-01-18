@@ -3,7 +3,9 @@
   "type": "module",
   "name": "@hello/server",
   "scripts": {
-    "dev": "rolldown --watch --config rolldown.config.ts"
+    "dev": "rolldown --watch --config rolldown.config.ts",
+    "build": "rolldown --env PRODUCTION --config rolldown.config.ts",
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@aminnairi/rpc": "^0.1.0",
