@@ -1,6 +1,6 @@
 import { createHTTPRoute, createHTTPRoutes } from "@aminnairi/rpc";
 import { z } from "zod";
-import { applicationsSchema, settingsCryptoSchema, cryptosSchema } from "./schema";
+import { applicationsSchema, cryptosSchema } from "./schema";
 
 export const [getApplications, implementGetApplications] = createHTTPRoute({
   parseInput: input => {
