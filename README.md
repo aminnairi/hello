@@ -2,7 +2,7 @@
 
 Self-hosted dashboard
 
-![Mobile Screenshot](./applications/web/public/screenshot-narrow.png)
+<img style="width: 100px" src="./applications/web/public/screenshot-narrow.png" />
 
 ## Usage
 
