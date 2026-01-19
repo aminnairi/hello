@@ -84,6 +84,15 @@ function App() {
     })
   }, [mode]);
 
+  const withVibration = useCallback(<Input, Output>(fn: (...input: Input[]) => Output) => {
+    return (...input: Input[]): Output => {
+      if (window.navigator.vibrate) {
+        window.navigator.vibrate(50);
+      }
+      return fn(...input);
+    }
+  }, []);
+
   const onSearchKeydown = useCallback((event: KeyboardEvent) => {
     if (event.key === "Escape") {
       setSearch("");
@@ -208,12 +217,12 @@ function App() {
                         color: theme.palette.common.white
                       },
                       endAdornment: (
-                        <IconButton onClick={onCloseEndAdornmentClick}>
+                        <IconButton onClick={withVibration(onCloseEndAdornmentClick)}>
                           <Close sx={{ color: theme.palette.common.white }} />
                         </IconButton>
                       ),
                       startAdornment: (
-                        <IconButton onClick={onArrowLeftIconButtonClick}>
+                        <IconButton onClick={withVibration(onArrowLeftIconButtonClick)}>
                           <ArrowBack sx={{ color: theme.palette.common.white }} />
                         </IconButton>
                       )
@@ -223,14 +232,14 @@ function App() {
               </Fragment>
             ) : (
               <Fragment>
-                <IconButton onClick={onMenuIconButtonClick}>
+                <IconButton onClick={withVibration(onMenuIconButtonClick)}>
                   <Menu sx={{ color: theme.palette.common.white }} />
                 </IconButton>
                 <Typography align="center" variant="h6" flex="1">Hello</Typography>
-                <IconButton onClick={onSearchIconButtonClick}>
+                <IconButton onClick={withVibration(onSearchIconButtonClick)}>
                   <Search sx={{ color: theme.palette.common.white }} />
                 </IconButton>
-                <IconButton onClick={onModeIconButtonClick}>
+                <IconButton onClick={withVibration(onModeIconButtonClick)}>
                   {mode === "light" ? <LightMode sx={{ color: theme.palette.common.white }} /> : <DarkMode sx={{ color: theme.palette.common.white }} />}
                 </IconButton>
               </Fragment>
