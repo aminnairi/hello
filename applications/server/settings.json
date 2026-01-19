@@ -1,29 +1,24 @@
 {
   "applications": [
     {
-      "identifier": "1ef43926-f185-43a1-b207-e354c24e7eac",
       "name": "Excalidraw",
       "url": "https://excalidraw.com"
     },
     {
-      "identifier": "0f262775-44fa-4727-b818-dbe9b9cb888b",
       "name": "Google Task",
       "url": "https://calendar.google.com/tasks"
     }
   ],
   "crypto": [
     {
-      "identifier": "2967f696-0570-47f2-b0fe-70f6a996d8ef",
       "name": "Bitcoin",
       "ticker": "BTC"
     },
     {
-      "identifier": "412ad329-2e32-4237-a97c-0775c9dc97ef",
       "name": "Ethereum",
       "ticker": "ETH"
     },
     {
-      "identifier": "2783fcfa-f226-40f3-9ecc-76ce2f563011",
       "name": "Solana",
       "ticker": "SOL"
     }
