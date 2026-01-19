@@ -8,13 +8,11 @@ export const cryptoSchema = z.object({
 export const cryptosSchema = z.array(cryptoSchema);
 
 export const applicationsSchema = z.array(z.object({
-  identifier: z.string(),
   name: z.string(),
   url: z.string(),
 }));
 
 export const settingsCryptoSchema = z.array(z.object({
-  identifier: z.string(),
   name: z.string(),
   ticker: z.string(),
 }));
