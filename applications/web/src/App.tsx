@@ -7,7 +7,6 @@ import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
 import { routes } from "@hello/server/routes";
 
-
 function App() {
   const [applications, setApplications] = useState<Applications>([]);
   const [cryptos, setCryptos] = useState<Cryptos>([]);
@@ -22,8 +21,8 @@ function App() {
 
   const request = useMemo(() => createHTTPRequest({
     routes,
-    url: remoteUrl
-  }), [remoteUrl]);
+    url: "/api"
+  }), []);
 
   const theme = useMemo(() => {
     if (mode === "light") {
