@@ -135,7 +135,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    new Promise(resolve => setTimeout(resolve, 30_000)).then(() => {
+    new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
       request("getApplications", null).then(response => {
         if (response instanceof Error) {
           throw new Error
@@ -149,7 +149,7 @@ function App() {
   }, [request]);
 
   useEffect(() => {
-    new Promise(resolve => setTimeout(resolve, 30_000)).then(() => {
+    new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
       request("getCryptos", null).then(response => {
         if (response instanceof Error) {
           throw new Error
