@@ -5,6 +5,8 @@ services:
     working_dir: /home/node
     tty: true
     stdin_open: true
+    environment:
+      SERVER_WEB_URL: http://localhost:8001
     volumes:
       - .:/home/node
     ports:
