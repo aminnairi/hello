@@ -1,4 +1,4 @@
-import { Fragment, startTransition, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent, type MouseEvent } from "react"
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent, type MouseEvent } from "react"
 import { AppBar, Backdrop, Button, Card, CardActions, CardContent, CardHeader, Container, createTheme, CssBaseline, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, TextField, Toolbar, Typography, type PaletteMode } from "@mui/material";
 import type { Applications } from "@hello/server/schema";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, Settings, ArrowBack } from "@mui/icons-material";
@@ -31,24 +31,24 @@ function App() {
         palette: {
           mode: 'light',
           primary: {
-            main: '#6366f1', // Indigo moderne
+            main: '#6366f1',
             light: '#818cf8',
             dark: '#4f46e5',
           },
           secondary: {
-            main: '#10b981', // Émeraude
+            main: '#10b981',
           },
           background: {
-            default: '#f8fafc', // Gris très clair (Slate 50)
+            default: '#f8fafc',
             paper: '#ffffff',
           },
           text: {
-            primary: '#1e293b', // Slate 800
+            primary: '#1e293b',
             secondary: '#64748b',
           },
         },
         shape: {
-          borderRadius: 12, // Coins arrondis pour un look moderne
+          borderRadius: 12,
         },
       });
     }
@@ -57,14 +57,14 @@ function App() {
       palette: {
         mode: 'dark',
         primary: {
-          main: '#818cf8', // Indigo plus clair pour le mode sombre
+          main: '#818cf8',
         },
         secondary: {
           main: '#34d399',
         },
         background: {
-          default: '#0f172a', // Slate 900 (Bleu nuit profond)
-          paper: '#1e293b',   // Slate 800
+          default: '#0f172a',
+          paper: '#1e293b',
         },
         text: {
           primary: '#f1f5f9',
@@ -78,7 +78,7 @@ function App() {
         MuiPaper: {
           styleOverrides: {
             root: {
-              backgroundImage: 'none', // Supprime l'overlay gris par défaut de MUI
+              backgroundImage: 'none',
             },
           },
         },
