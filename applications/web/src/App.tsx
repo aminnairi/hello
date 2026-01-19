@@ -18,6 +18,18 @@ function App() {
   const [search, setSearch] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
 
+  const filteredApplications = useMemo(() => {
+    return applications.filter(application => {
+      return application.name.toLowerCase().includes(search.toLowerCase());
+    })
+  }, [applications, search]);
+
+  const filteredCryptos = useMemo(() => {
+    return cryptos.filter(crypto => {
+      return crypto.symbol.toLowerCase().includes(search.toLowerCase());
+    });
+  }, [cryptos, search]);
+
   const request = useMemo(() => createHTTPRequest({
     routes,
     url: "/api"
@@ -97,8 +109,25 @@ function App() {
     if (event.key === "Escape") {
       setSearch("");
       setSearchOpened(false);
+      return;
     }
-  }, []);
+
+    if (event.key === "Enter") {
+      const application = filteredApplications.at(0);
+
+      if (application) {
+        window.open(application.url);
+        return;
+      }
+
+      const crypto = filteredCryptos.at(0);
+
+      if (crypto) {
+        window.open(`https://www.binance.com/fr/trade/${crypto.symbol}`);
+        return;
+      }
+    }
+  }, [filteredApplications, filteredCryptos]);
 
   const onArrowLeftIconButtonClick = useCallback(() => {
     setSearchOpened(false);
@@ -184,6 +213,7 @@ function App() {
         event.stopPropagation();
         setSearchOpened(true);
         setSearch("");
+        return;
       }
     };
 
@@ -291,9 +321,7 @@ function App() {
                 ))}
               </Stack>
             ) : (
-              applications.filter(application => {
-                return application.name.toLowerCase().includes(search.toLowerCase());
-              }).map((application, index) => (
+              filteredApplications.map((application, index) => (
                 <ListItem key={index}>
                   <ListItemButton onClick={onApplicationListItemButtonClicked(application.url)}>
                     <ListItemIcon>
@@ -321,9 +349,7 @@ function App() {
                 ))}
               </Stack>
             ) : (
-              cryptos.filter(crypto => {
-                return crypto.symbol.toLowerCase().includes(search.toLowerCase());
-              }).map((crypto, index) => (
+              filteredCryptos.map((crypto, index) => (
                 <ListItem key={index}>
                   <ListItemButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
                     <ListItemIcon>
