@@ -51,25 +51,65 @@ touch settings.json
 #### Setup
 
 ```bash
+touch default.conf
+```
+
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        proxy_pass http://hello-web:8001/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /api/ {
+        proxy_pass http://hello-server:8000/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+```bash
 touch compose.yml
 ```
 
 ```yaml
 services:
-  hello-web:
-    container_name: hello-web
-    restart: unless-stopped
-    image: aminnairi/hello-web:0.1.0
-    ports:
-      - 8001:8001
   hello-server:
     container_name: hello-server
     restart: unless-stopped
     image: aminnairi/hello-server:0.1.0
-    ports:
-      - 8000:8000
     volumes:
       - ./settings.json:/home/node/settings.json
+  hello-web:
+    container_name: hello-web
+    restart: unless-stopped
+    image: aminnairi/hello-web:0.1.0
+    depends_on:
+      - hello-server
+  hello-proxy:
+    container_name: hello-proxy
+    restart: unless-stopped
+    image: nginx:1.29.4-alpine3.23
+    depends_on:
+      - hello-server
+      - hello-client
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
 ```
 
 #### Start
