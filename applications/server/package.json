@@ -4,7 +4,7 @@
   "name": "@hello/server",
   "scripts": {
     "dev": "rolldown --watch --config rolldown.config.ts",
-    "build": "rolldown --env PRODUCTION --config rolldown.config.ts",
+    "build": "rolldown --config rolldown.config.ts",
     "start": "node dist/index.js"
   },
   "dependencies": {
