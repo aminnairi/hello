@@ -1,7 +1,7 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent, type MouseEvent } from "react"
-import { AppBar, Backdrop, Button, Card, CardActions, CardContent, CardHeader, Container, createTheme, CssBaseline, Divider, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, SpeedDial, SpeedDialAction, SpeedDialIcon, Stack, TextField, Toolbar, Typography, type PaletteMode } from "@mui/material";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
+import { AppBar, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, type PaletteMode } from "@mui/material";
 import type { Applications } from "@hello/server/schema";
-import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, Settings, ArrowBack } from "@mui/icons-material";
+import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack } from "@mui/icons-material";
 import type { Cryptos } from "@hello/server/schema"
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
@@ -9,14 +9,13 @@ import { routes } from "@hello/server/routes";
 
 function App() {
   const [applications, setApplications] = useState<Applications>([]);
+  const [loadingApplications, setLoadingApplications] = useState(true);
   const [cryptos, setCryptos] = useState<Cryptos>([]);
+  const [loadingCryptos, setLoadingCryptos] = useState(true);
   const [mode, setMode] = useState<PaletteMode>(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [search, setSearch] = useState("");
-  const [settingsModalOpened, setSettingsModalOpened] = useState(false);
-  const [remoteUrl, setRemoteUrl] = useState("");
-  const [speedDialOpened, setSpeedDialOpened] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const request = useMemo(() => createHTTPRequest({
@@ -97,27 +96,6 @@ function App() {
     setSearch("");
   }, []);
 
-  const onSpeedDialOpened = useCallback(() => {
-    setSpeedDialOpened(true);
-  }, []);
-
-  const onSpeedDialClosed = useCallback(() => {
-    setSpeedDialOpened(false);
-  }, []);
-
-  const onSettingsModalClose = useCallback(() => {
-    setSettingsModalOpened(false);
-  }, []);
-
-  const onSettingsSpeedDialIconClick = useCallback((event: MouseEvent) => {
-    event.preventDefault();
-    setSettingsModalOpened(true);
-  }, []);
-
-  const onRemoteUrlChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setRemoteUrl(event.target.value);
-  }, []);
-
   const onSearchChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   }, []);
@@ -157,23 +135,31 @@ function App() {
   }, []);
 
   useEffect(() => {
-    request("getApplications", null).then(response => {
-      if (response instanceof Error) {
-        throw new Error
-      }
+    new Promise(resolve => setTimeout(resolve, 30_000)).then(() => {
+      request("getApplications", null).then(response => {
+        if (response instanceof Error) {
+          throw new Error
+        }
 
-      setApplications(response.applications);
-    })
+        setApplications(response.applications);
+      }).finally(() => {
+        setLoadingApplications(false);
+      });
+    });
   }, [request]);
 
   useEffect(() => {
-    request("getCryptos", null).then(response => {
-      if (response instanceof Error) {
-        throw new Error
-      }
+    new Promise(resolve => setTimeout(resolve, 30_000)).then(() => {
+      request("getCryptos", null).then(response => {
+        if (response instanceof Error) {
+          throw new Error
+        }
 
-      setCryptos(response);
-    });
+        setCryptos(response);
+      }).finally(() => {
+        setLoadingCryptos(false);
+      });
+    })
   }, [request]);
 
   useEffect(() => {
@@ -185,7 +171,10 @@ function App() {
   useEffect(() => {
     const onWindowKeydown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "/") {
+        event.preventDefault();
+        event.stopPropagation();
         setSearchOpened(true);
+        setSearch("");
       }
     };
 
@@ -278,21 +267,25 @@ function App() {
           </List>
         </Drawer>
         <Stack paddingTop="80px" justifyContent="center" alignItems="center" minHeight="80vh">
-          {remoteUrl.trim().length === 0 ? (
-            <Stack spacing={3} justifyContent="center" alignItems="center" height="80vh">
-              <Typography>
-                Server URL not set.
-              </Typography>
-              <Typography align="center">
-                <Link onClick={onSettingsSpeedDialIconClick} href="">Open settings</Link> in order to update the server URL.
-              </Typography>
-            </Stack>
-          ) : (
-            <List>
-              {applications.filter(application => {
+          <List>
+            {loadingApplications ? (
+              <Stack spacing={3} paddingBottom={3}>
+                {Array.from(Array(3)).map(() => (
+                  <Stack direction="row" minWidth="300px" spacing={3} alignItems="center">
+                    <Skeleton variant="circular" width="40px" height="40px" />
+                    <Stack flex="1">
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                    </Stack>
+                    <Skeleton variant="rectangular" height="40px" width="40px" />
+                  </Stack>
+                ))}
+              </Stack>
+            ) : (
+              applications.filter(application => {
                 return application.name.toLowerCase().includes(search.toLowerCase());
-              }).map(application => (
-                <ListItem key={application.identifier}>
+              }).map((application, index) => (
+                <ListItem key={index}>
                   <ListItemButton onClick={onApplicationListItemButtonClicked(application.url)}>
                     <ListItemIcon>
                       <Public />
@@ -303,12 +296,26 @@ function App() {
                     </ListItemIcon>
                   </ListItemButton>
                 </ListItem>
-              ))}
-              <Divider />
-              {cryptos.filter(crypto => {
+              ))
+            )}
+            {loadingCryptos ? (
+              <Stack spacing={3}>
+                {Array.from(Array(3)).map(() => (
+                  <Stack direction="row" minWidth="300px" spacing={3} alignItems="center">
+                    <Skeleton variant="circular" width="40px" height="40px" />
+                    <Stack flex="1">
+                      <Skeleton variant="text" />
+                      <Skeleton variant="text" />
+                    </Stack>
+                    <Skeleton variant="rectangular" height="40px" width="40px" />
+                  </Stack>
+                ))}
+              </Stack>
+            ) : (
+              cryptos.filter(crypto => {
                 return crypto.symbol.toLowerCase().includes(search.toLowerCase());
-              }).map(crypto => (
-                <ListItem key={crypto.symbol}>
+              }).map((crypto, index) => (
+                <ListItem key={index}>
                   <ListItemButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
                     <ListItemIcon>
                       <ShowChart />
@@ -319,42 +326,10 @@ function App() {
                     </ListItemIcon>
                   </ListItemButton>
                 </ListItem>
-              ))}
-            </List>
-          )}
+              ))
+            )}
+          </List>
         </Stack>
-        <Modal open={settingsModalOpened} onClose={onSettingsModalClose} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
-          <Stack alignItems="center" justifyContent="center" width="100vw" height="100vh">
-            <Card>
-              <CardHeader title="Settings" />
-              <CardContent>
-                <TextField
-                  label="Server URL"
-                  size="small"
-                  value={remoteUrl}
-                  onChange={onRemoteUrlChange}
-                />
-              </CardContent>
-              <CardActions>
-                <Button size="small" variant="text" onClick={() => setSettingsModalOpened(false)}>
-                  Close
-                </Button>
-              </CardActions>
-            </Card>
-          </Stack>
-        </Modal>
-        <Backdrop open={speedDialOpened}></Backdrop>
-        <SpeedDial
-          ariaLabel="Actions"
-          sx={{ position: "absolute", bottom: "30px", right: "30px" }}
-          icon={<SpeedDialIcon />}
-          onOpen={onSpeedDialOpened}
-          onClose={onSpeedDialClosed}>
-          <SpeedDialAction
-            icon={<Settings />}
-            onClick={onSettingsSpeedDialIconClick}
-          />
-        </SpeedDial>
       </ThemeProvider>
     </Container>
   )
