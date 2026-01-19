@@ -1,8 +1,8 @@
-# hello
+<h1 style="text-align: center">Hello</h1>
 
-Self-hosted dashboard
+<p style="text-align: center">Self-hosted dashboard</p>
 
-<img style="width: 300px" src="./applications/web/public/screenshot-narrow.png" />
+<img style="width: 300px; margin: 0 auto; display: block;" src="./applications/web/public/screenshot-narrow.png" />
 
 ## Usage
 
@@ -57,26 +57,14 @@ touch default.conf
 ```nginx
 server {
     listen 80;
-    server_name localhost;
+    server_name 127.0.0.1 localhost your.domain.com;
 
     location / {
         proxy_pass http://hello-web:8001/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
     }
 
     location /api/ {
         proxy_pass http://hello-server:8000/;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
 ```
@@ -105,7 +93,7 @@ services:
     image: nginx:1.29.4-alpine3.23
     depends_on:
       - hello-server
-      - hello-client
+      - hello-web
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
     ports:
