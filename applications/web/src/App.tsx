@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { AppBar, Card, CardContent, CardHeader, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
+import { AppBar, Card, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
 import type { Applications } from "@hello/server/schema";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed } from "@mui/icons-material";
 import type { Cryptos } from "@hello/server/schema"
@@ -138,7 +138,7 @@ function App() {
         return;
       }
 
-      window.open(`https://google.fr/search?q=${search}`);
+      window.open(`https://google.com/search?q=${search}`);
     }
   }, [filteredApplications, filteredCryptos, search]);
 
@@ -184,6 +184,10 @@ function App() {
   const onCloseEndAdornmentClick = useCallback(() => {
     setSearch("");
   }, []);
+
+  const openSearchEngine = useCallback(() => {
+    window.open(`https://google.com/search?q=${search}`);
+  }, [search]);
 
   useEffect(() => {
     new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
@@ -503,7 +507,7 @@ function App() {
                   )}
                   {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
                     <Typography align="center" variant="body1">
-                      Type <kbd>Enter</kbd> to search for « {search} » using Google.
+                      Type <Chip label="Enter" onClick={openSearchEngine} /> to search for « {search} » using Google.
                     </Typography>
                   )}
                 </List>
