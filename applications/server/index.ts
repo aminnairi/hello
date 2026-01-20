@@ -1,17 +1,15 @@
 import { createHTTPServer } from "@aminnairi/rpc-node";
-import { routes, implementGetApplications } from "./routes";
-import { settings } from "./settings";
+import { routes } from "./routes";
 import { getCryptos } from "./implementations/getCryptos";
+import { getWeather } from "./implementations/getWeather";
+import { getApplications } from "./implementations/getApplication";
 
 const server = createHTTPServer({
   routes,
   implementations: {
-    getApplications: implementGetApplications(async () => {
-      return {
-        applications: settings.applications
-      }
-    }),
+    getApplications,
     getCryptos,
+    getWeather,
   },
 });
 
