@@ -507,7 +507,7 @@ function App() {
                   )}
                   {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
                     <Typography align="center" variant="body1">
-                      Type <Chip label="Enter" onClick={openSearchEngine} /> to search for « {search} » using Google.
+                      Type <Chip icon={<Search />} size="small" label="Enter" onClick={openSearchEngine} clickable /> to search for « {search} » using Google.
                     </Typography>
                   )}
                 </List>
