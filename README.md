@@ -1,4 +1,4 @@
-<h1 style="text-align: center">Hello</h1>
+<h1 style="text-align: center">👋 Hello</h1>
 
 <p style="text-align: center">Self-hosted dashboard</p>
 
