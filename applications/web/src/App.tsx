@@ -1,11 +1,11 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { AppBar, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, type PaletteMode } from "@mui/material";
+import { AppBar, Card, CardContent, CardHeader, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
 import type { Applications } from "@hello/server/schema";
-import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack } from "@mui/icons-material";
+import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed } from "@mui/icons-material";
 import type { Cryptos } from "@hello/server/schema"
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
-import { routes } from "@hello/server/routes";
+import { routes, type Weather } from "@hello/server/routes";
 
 function App() {
   const [applications, setApplications] = useState<Applications>([]);
@@ -16,17 +16,28 @@ function App() {
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [search, setSearch] = useState("");
+  const [weather, setWeather] = useState<Weather | null>(null);
+  const [weatherLoading, setWeatherLoading] = useState(true);
+  const [date, setDate] = useState(new Date());
   const searchRef = useRef<HTMLInputElement>(null);
 
   const filteredApplications = useMemo(() => {
     return applications.filter(application => {
-      return application.name.toLowerCase().includes(search.toLowerCase());
-    })
+      return application.name.trim().toLowerCase().split(/\s+/).every(applicationNameWord => {
+        return search.trim().toLowerCase().split(/\s+/).some(searchWord => {
+          return applicationNameWord.includes(searchWord);
+        });
+      });
+    });
   }, [applications, search]);
 
   const filteredCryptos = useMemo(() => {
     return cryptos.filter(crypto => {
-      return crypto.symbol.toLowerCase().includes(search.toLowerCase());
+      return crypto.symbol.trim().toLowerCase().split(/\s+/).every(cryptoNameWord => {
+        return search.trim().toLowerCase().split(/\s+/).some(searchWord => {
+          return cryptoNameWord.includes(searchWord);
+        });
+      });
     });
   }, [cryptos, search]);
 
@@ -126,8 +137,10 @@ function App() {
         window.open(`https://www.binance.com/fr/trade/${crypto.symbol}`);
         return;
       }
+
+      window.open(`https://google.fr/search?q=${search}`);
     }
-  }, [filteredApplications, filteredCryptos]);
+  }, [filteredApplications, filteredCryptos, search]);
 
   const onArrowLeftIconButtonClick = useCallback(() => {
     setSearchOpened(false);
@@ -209,8 +222,18 @@ function App() {
   useEffect(() => {
     const onWindowKeydown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "/") {
+        if (searchRef.current === document.activeElement) {
+          return;
+        }
+
         event.preventDefault();
         event.stopPropagation();
+
+        if (searchOpened) {
+          searchRef.current?.focus();
+          return;
+        }
+
         setSearchOpened(true);
         setSearch("");
         return;
@@ -222,10 +245,38 @@ function App() {
     return () => {
       window.removeEventListener("keydown", onWindowKeydown);
     };
+  }, [searchOpened]);
+
+  useEffect(() => {
+    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
+      request("getWeather", null).then(response => {
+        if (response instanceof Error) {
+          return;
+        }
+
+        if (!response.success) {
+          return;
+        }
+
+        setWeather(response.weather);
+      }).finally(() => {
+        setWeatherLoading(false);
+      });
+    });
+  }, [request]);
+
+  useEffect(() => {
+    const intervalIdentifier = setInterval(() => {
+      setDate(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalIdentifier);
+    };
   }, []);
 
   return (
-    <Container>
+    <Container maxWidth="xs">
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="fixed">
@@ -303,67 +354,162 @@ function App() {
                 </ListItemIcon>
               </ListItemButton>
             </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => window.open("https://github.com/aminnairi/hello/issues")}>
+                <ListItemIcon>
+                  <BugReport />
+                </ListItemIcon>
+                <ListItemText primary="aminnairi/hello" secondary="Fill a bug report" />
+                <ListItemIcon>
+                  <OpenInNew />
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
           </List>
         </Drawer>
-        <Stack paddingTop="80px" justifyContent="center" alignItems="center" minHeight="80vh">
-          <List>
-            {loadingApplications ? (
-              <Stack spacing={3} paddingBottom={3}>
-                {Array.from(Array(3)).map(() => (
-                  <Stack direction="row" minWidth="300px" spacing={3} alignItems="center">
-                    <Skeleton variant="circular" width="40px" height="40px" />
-                    <Stack flex="1">
-                      <Skeleton variant="text" />
-                      <Skeleton variant="text" />
+        <Stack paddingTop="80px" justifyContent="center" minHeight="80vh" spacing={3}>
+          <Zoom appear in={true}>
+            <Card>
+              <CardContent>
+                <Stack spacing={3} justifyContent="center" alignItems="center">
+                  <Typography variant="body1" align="center">
+                    {new Intl.DateTimeFormat("fr-FR", { timeStyle: "medium" }).format(date)}
+                  </Typography>
+                  <Typography variant="body2" align="center">
+                    {new Intl.DateTimeFormat("fr-FR", { dateStyle: "full" }).format(date)}
+                  </Typography>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Zoom>
+          {weatherLoading ? (
+            <Card>
+              <CardContent>
+                <Stack spacing={3} paddingBottom={3}>
+                  <Skeleton variant="text" width="100px" />
+                  <Stack spacing={3} justifyContent="center" alignItems="center" direction="row">
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                      <Thermostat />
+                      <Skeleton variant="text" width="50px" />
                     </Stack>
-                    <Skeleton variant="rectangular" height="40px" width="40px" />
-                  </Stack>
-                ))}
-              </Stack>
-            ) : (
-              filteredApplications.map((application, index) => (
-                <ListItem key={index}>
-                  <ListItemButton onClick={onApplicationListItemButtonClicked(application.url)}>
-                    <ListItemIcon>
-                      <Public />
-                    </ListItemIcon>
-                    <ListItemText primary={application.name} secondary={new URL(application.url).host} />
-                    <ListItemIcon sx={{ paddingLeft: 3 }}>
-                      <OpenInNew />
-                    </ListItemIcon>
-                  </ListItemButton>
-                </ListItem>
-              ))
-            )}
-            {loadingCryptos ? (
-              <Stack spacing={3}>
-                {Array.from(Array(3)).map(() => (
-                  <Stack direction="row" minWidth="300px" spacing={3} alignItems="center">
-                    <Skeleton variant="circular" width="40px" height="40px" />
-                    <Stack flex="1">
-                      <Skeleton variant="text" />
-                      <Skeleton variant="text" />
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                      <Opacity />
+                      <Skeleton variant="text" width="50px" />
                     </Stack>
-                    <Skeleton variant="rectangular" height="40px" width="40px" />
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                      <Speed />
+                      <Skeleton variant="text" width="50px" />
+                    </Stack>
                   </Stack>
-                ))}
-              </Stack>
-            ) : (
-              filteredCryptos.map((crypto, index) => (
-                <ListItem key={index}>
-                  <ListItemButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
-                    <ListItemIcon>
-                      <ShowChart />
-                    </ListItemIcon>
-                    <ListItemText primary={crypto.symbol} secondary={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)} />
-                    <ListItemIcon sx={{ paddingLeft: 3 }}>
-                      <OpenInNew />
-                    </ListItemIcon>
-                  </ListItemButton>
-                </ListItem>
-              ))
-            )}
-          </List>
+                </Stack>
+              </CardContent>
+            </Card>
+          ) : weather && (
+            <Zoom appear in={true}>
+              <Card>
+                <CardHeader title={weather.description} />
+                <CardContent>
+                  <Stack spacing={3} justifyContent="center" alignItems="center" direction="row">
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                      <Thermostat />
+                      <Typography variant="body1" align="center">
+                        {weather.temperature}°C
+                      </Typography>
+                    </Stack>
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                      <Opacity />
+                      <Typography variant="body1" align="center">
+                        {weather.humidity} mm³
+                      </Typography>
+                    </Stack>
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                      <Speed />
+                      <Typography variant="body1" align="center">
+                        {weather.pressure} hPa
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Zoom>
+          )}
+          <Card>
+            <CardContent>
+              <Zoom appear in={true}>
+                <List>
+                  {loadingApplications ? (
+                    <Stack spacing={3} paddingBottom={3}>
+                      {Array.from(Array(3)).map((_, index) => (
+                        <Stack direction="row" minWidth="300px" spacing={3} alignItems="center" key={index}>
+                          <Skeleton variant="circular" width="40px" height="40px" />
+                          <Stack flex="1">
+                            <Skeleton variant="text" />
+                            <Skeleton variant="text" />
+                          </Stack>
+                          <Skeleton variant="rectangular" height="40px" width="40px" />
+                        </Stack>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Zoom appear in={true}>
+                      <Stack>
+                        {filteredApplications.map((application, index) => (
+                          <ListItem key={index}>
+                            <ListItemButton onClick={onApplicationListItemButtonClicked(application.url)}>
+                              <ListItemIcon>
+                                <Public />
+                              </ListItemIcon>
+                              <ListItemText primary={application.name} secondary={new URL(application.url).host} />
+                              <ListItemIcon sx={{ paddingLeft: 3 }}>
+                                <OpenInNew />
+                              </ListItemIcon>
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </Stack>
+                    </Zoom>
+                  )}
+                  {loadingCryptos ? (
+                    <Stack spacing={3}>
+                      {Array.from(Array(3)).map((_, index) => (
+                        <Stack direction="row" minWidth="300px" spacing={3} alignItems="center" key={index}>
+                          <Skeleton variant="circular" width="40px" height="40px" />
+                          <Stack flex="1">
+                            <Skeleton variant="text" />
+                            <Skeleton variant="text" />
+                          </Stack>
+                          <Skeleton variant="rectangular" height="40px" width="40px" />
+                        </Stack>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Zoom appear in={true}>
+                      <Stack>
+                        {filteredCryptos.map((crypto, index) => (
+                          <ListItem key={index}>
+                            <ListItemButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
+                              <ListItemIcon>
+                                <ShowChart />
+                              </ListItemIcon>
+                              <ListItemText primary={crypto.symbol} secondary={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)} />
+                              <ListItemIcon sx={{ paddingLeft: 3 }}>
+                                <OpenInNew />
+                              </ListItemIcon>
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </Stack>
+                    </Zoom>
+                  )}
+                  {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
+                    <Typography align="center" variant="body1">
+                      Type <kbd>Enter</kbd> to search for « {search} » using Google.
+                    </Typography>
+                  )}
+                </List>
+              </Zoom>
+            </CardContent>
+          </Card>
         </Stack>
       </ThemeProvider>
     </Container>
