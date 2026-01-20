@@ -1,8 +1,8 @@
 # 👋 Hello
 
-Self-hosted dashboard
+Self-hosted dashboard</p>
 
-![Mobile preview](./applications/web/public/screenshot-narrow.png)
+<img style="width: 300px; margin: 0 auto; display: block;" src="./applications/web/public/screenshot-narrow.png" />
 
 ## Usage
 
