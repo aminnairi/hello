@@ -242,6 +242,16 @@ function App() {
         setSearch("");
         return;
       }
+
+      if (event.key === "Escape") {
+        if (searchOpened) {
+          setSearch("");
+          setSearchOpened(false);
+          return;
+        }
+
+        return;
+      }
     };
 
     window.addEventListener("keydown", onWindowKeydown);
