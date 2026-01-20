@@ -19,6 +19,11 @@ Minimalist self-hosted dashboard
 
 ## Usage
 
+### Requirements
+
+- [Docker](https://docker.com/)
+- [Docker Compose](https://docker.com/compose)
+
 ### Configuration
 
 ```bash
@@ -59,14 +64,10 @@ touch settings.json
 }
 ```
 
-### With Docker Compose
+> [!TIP]
+> You'll need to restart the containers before applying any update to the configuration above.
 
-#### Requirements
-
-- [Docker](https://docker.com/)
-- [Docker Compose](https://docker.com/compose)
-
-#### Setup
+### Proxy Setup
 
 ```bash
 touch default.conf
@@ -86,6 +87,11 @@ server {
     }
 }
 ```
+
+> [!NOTE]
+> You can use any reverse proxy of your choice for this part.
+
+### Docker Compose Setup
 
 ```bash
 touch compose.yml
@@ -118,32 +124,26 @@ services:
       - 80:80
 ```
 
-#### Start
+> [!WARNING]
+> If you have decided to use a different reverse proxy, you'll have to update your `compose.yml` file as well.
+
+### Start
 
 ```bash
 docker compose up -d
 ```
 
-### With Docker
+> [!TIP]
+> It is highly recommended to run `docker compose logs` in order to see if any errors have occurred.
 
-#### Requirements
-
-- [Docker](https://docker.com/)
-
-#### Start the server
+### Stop
 
 ```bash
-docker run \
-  -itp 8000:8000 \
-  -v ./settings.json:/home/node/settings.json \
-  aminnairi/hello-server:0.1.0
+docker compose down --remove-orphans --volumes --timeout 0
 ```
 
-#### Start the Web
-
-```bash
-docker run -itp 8001:8001 aminnairi/hello-web:0.1.0
-```
+> [!NOTE]
+> This won't remove any bind mount, only logical volumes if any are unused or orphans
 
 ## Development
 
@@ -185,7 +185,7 @@ docker run -itp 8001:8001 aminnairi/hello-web:0.1.0
 
 ```bash
 docker compose up -d
-docker compose exec node npm i
-docker compose exec node npm -w applications/server run dev
-docker compose exec node npm -w applications/web run dev
 ```
+
+> [!NOTE]
+> Navigate to [localhost](http://localhost) in order to explore the app.
