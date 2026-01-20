@@ -17,9 +17,16 @@ export const settingsCryptoSchema = z.array(z.object({
   ticker: z.string(),
 }));
 
+export const openweathermapSchema = z.object({
+  apiKey: z.string(),
+  city: z.string(),
+  language: z.string(),
+}).optional();
+
 export const settingsSchema = z.object({
   applications: applicationsSchema,
   crypto: settingsCryptoSchema,
+  openweathermap: openweathermapSchema,
 });
 
 export type Applications = z.infer<typeof applicationsSchema>;
