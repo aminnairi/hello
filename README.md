@@ -1,8 +1,21 @@
 # 👋 Hello
 
-Self-hosted dashboard</p>
+Minimalist self-hosted dashboard
 
 <img style="width: 50%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-dark.png" /><img style="width: 50%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-light.png" />
+
+## Features
+
+- Configurable: display apps, cryptos, stocks & weather
+- Installable: made as a Web App for being installed either on desktop or mobile
+- Search for apps, stocks & cryptos
+- Fallback to using Google when no matching apps/stocks/cryptos
+- Light & Dark theme based on the user's operating system preferences
+- Haptic feedback when suported by the device
+- Animations when fetching datas
+- Responsive for all devices (smartphone, tablet, desktop)
+- Containerized for ease of deployment
+- Free forever
 
 ## Usage
 
@@ -83,13 +96,13 @@ services:
   hello-server:
     container_name: hello-server
     restart: unless-stopped
-    image: aminnairi/hello-server:0.1.0
+    image: ghcr.io/aminnairi/hello-server:0.1.0
     volumes:
       - ./settings.json:/home/node/settings.json
   hello-web:
     container_name: hello-web
     restart: unless-stopped
-    image: aminnairi/hello-web:0.1.0
+    image: ghcr.io/aminnairi/hello-web:0.1.0
     depends_on:
       - hello-server
   hello-proxy:
