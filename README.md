@@ -2,8 +2,8 @@
 
 Self-hosted dashboard</p>
 
-<img style="width: 33%; margin: 10px auto; display: block;" src="./applications/web/public/screenshot-narrow-dark.png" />
-<img style="width: 33%; margin: 10px auto; display: block;" src="./applications/web/public/screenshot-narrow-light.png" />
+<img style="width: 33%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-dark.png" />
+<img style="width: 33%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-light.png" />
 
 ## Usage
 
