@@ -37,7 +37,12 @@ touch settings.json
       "name": "Solana",
       "ticker": "SOL"
     }
-  ]
+  ],
+  "openweathermap": {
+    "apiKey": "39f89...",
+    "city": "Paris",
+    "language": "fr"
+  }
 }
 ```
 
