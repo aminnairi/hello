@@ -1,8 +1,8 @@
-<h1 style="text-align: center">👋 Hello</h1>
+# 👋 Hello
 
-<p style="text-align: center">Self-hosted dashboard</p>
+Self-hosted dashboard
 
-<img style="width: 300px; margin: 0 auto; display: block;" src="./applications/web/public/screenshot-narrow.png" />
+![Mobile preview](./applications/web/public/screenshot-narrow.png)
 
 ## Usage
 
