@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [react()],
   envPrefix: "WEB_",
   server: {
+    allowedHosts: true,
     port: 8001,
     host: true,
   },
