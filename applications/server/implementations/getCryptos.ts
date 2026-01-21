@@ -1,5 +1,5 @@
 import { implementGetCryptos } from "../routes/getCryptos";
-import { cryptosSchema } from "../schema";
+import { cryptosSchema } from "../routes/getCryptos/output";
 import { settings } from "../settings";
 
 export const getCryptos = implementGetCryptos(async () => {
@@ -8,5 +8,13 @@ export const getCryptos = implementGetCryptos(async () => {
   const data = await response.json();
   const value = cryptosSchema.parse(data);
 
-  return value;
+  return {
+    success: true,
+    cryptos: value.map(crypto => {
+      return {
+        symbol: crypto.symbol,
+        price: crypto.price,
+      }
+    })
+  };
 });
