@@ -1,11 +1,21 @@
 import z from "zod";
 import { settings } from "../settings";
 import { implementGetWeather } from "../routes/getWeather";
+import { checkAuthentication } from "../functions/checkAuthentication";
 
-export const getWeather = implementGetWeather(async () => {
+export const getWeather = implementGetWeather(async ({ token }) => {
   if (!settings.openweathermap) {
     return {
       success: false,
+    };
+  }
+
+  const authenticationError = await checkAuthentication(settings, token);
+
+  if (authenticationError instanceof Error) {
+    return {
+      success: false,
+      error: "Unauthenticated",
     };
   }
 
