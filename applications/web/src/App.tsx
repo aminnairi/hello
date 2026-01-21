@@ -1,12 +1,12 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { AppBar, Card, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
+import { AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed } from "@mui/icons-material";
-import type { Cryptos } from "@hello/server/schema"
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
 import { routes } from "@hello/server/routes";
 import type { Weather } from "@hello/server/routes/getWeather/output";
 import type { Applications } from "@hello/server/routes/getApplications/output";
+import type { Cryptos } from "@hello/server/routes/getCryptos/output";
 
 function App() {
   const [applications, setApplications] = useState<Applications>([]);
@@ -211,7 +211,7 @@ function App() {
           throw new Error
         }
 
-        setCryptos(response);
+        setCryptos(response.cryptos);
       }).finally(() => {
         setLoadingCryptos(false);
       });
@@ -445,9 +445,58 @@ function App() {
                     </Stack>
                   </Stack>
                 </CardContent>
+                <CardActions>
+                  <Button onClick={() => window.open(`https://openweathermap.org/city/${weather.identifier}`)}>
+                    Details
+                  </Button>
+                </CardActions>
               </Card>
             </Zoom>
           )}
+          <Card>
+            <CardContent>
+              <Zoom appear in={true}>
+                <List>
+                  {loadingCryptos ? (
+                    <Stack spacing={3}>
+                      {Array.from(Array(3)).map((_, index) => (
+                        <Stack direction="row" minWidth="300px" spacing={3} alignItems="center" key={index}>
+                          <Skeleton variant="circular" width="40px" height="40px" />
+                          <Stack flex="1">
+                            <Skeleton variant="text" />
+                            <Skeleton variant="text" />
+                          </Stack>
+                          <Skeleton variant="rectangular" height="40px" width="40px" />
+                        </Stack>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Zoom appear in={true}>
+                      <Stack>
+                        {filteredCryptos.length === 0 ? (
+                          <Typography align="center">
+                            No matching cryptos.
+                          </Typography>
+                        ) : filteredCryptos.map((crypto, index) => (
+                          <ListItem key={index}>
+                            <ListItemButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
+                              <ListItemIcon>
+                                <ShowChart />
+                              </ListItemIcon>
+                              <ListItemText primary={crypto.symbol} secondary={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)} />
+                              <ListItemIcon sx={{ paddingLeft: 3 }}>
+                                <OpenInNew />
+                              </ListItemIcon>
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </Stack>
+                    </Zoom>
+                  )}
+                </List>
+              </Zoom>
+            </CardContent>
+          </Card>
           <Card>
             <CardContent>
               <Zoom appear in={true}>
@@ -468,7 +517,11 @@ function App() {
                   ) : (
                     <Zoom appear in={true}>
                       <Stack>
-                        {filteredApplications.map((application) => (
+                        {filteredApplications.length === 0 ? (
+                          <Typography align="center">
+                            No matching applications.
+                          </Typography>
+                        ) : filteredApplications.map((application) => (
                           <ListItem key={application.identifier}>
                             <ListItemButton onClick={onApplicationListItemButtonClicked(application.url)}>
                               <ListItemIcon>
@@ -484,47 +537,17 @@ function App() {
                       </Stack>
                     </Zoom>
                   )}
-                  {loadingCryptos ? (
-                    <Stack spacing={3}>
-                      {Array.from(Array(3)).map((_, index) => (
-                        <Stack direction="row" minWidth="300px" spacing={3} alignItems="center" key={index}>
-                          <Skeleton variant="circular" width="40px" height="40px" />
-                          <Stack flex="1">
-                            <Skeleton variant="text" />
-                            <Skeleton variant="text" />
-                          </Stack>
-                          <Skeleton variant="rectangular" height="40px" width="40px" />
-                        </Stack>
-                      ))}
-                    </Stack>
-                  ) : (
-                    <Zoom appear in={true}>
-                      <Stack>
-                        {filteredCryptos.map((crypto, index) => (
-                          <ListItem key={index}>
-                            <ListItemButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
-                              <ListItemIcon>
-                                <ShowChart />
-                              </ListItemIcon>
-                              <ListItemText primary={crypto.symbol} secondary={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)} />
-                              <ListItemIcon sx={{ paddingLeft: 3 }}>
-                                <OpenInNew />
-                              </ListItemIcon>
-                            </ListItemButton>
-                          </ListItem>
-                        ))}
-                      </Stack>
-                    </Zoom>
-                  )}
-                  {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
-                    <Typography align="center" variant="body1">
-                      Type <Chip icon={<Search />} size="small" label="Enter" onClick={openSearchEngine} clickable /> to search for « {search} » using Google.
-                    </Typography>
-                  )}
                 </List>
               </Zoom>
             </CardContent>
           </Card>
+          <Typography align="center">
+            {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
+              <Typography align="center" variant="body1">
+                Type <Chip icon={<Search />} size="small" label="Enter" onClick={openSearchEngine} clickable /> to search for « {search} » using Google.
+              </Typography>
+            )}
+          </Typography>
         </Stack>
       </ThemeProvider>
     </Container>

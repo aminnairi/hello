@@ -6,6 +6,7 @@ export const weatherSchema = z.object({
   temperature: z.number(),
   humidity: z.number(),
   pressure: z.number(),
+  identifier: z.number(),
 });
 
 export type Weather = z.infer<typeof weatherSchema>;

@@ -13,6 +13,7 @@ export const getWeather = implementGetWeather(async () => {
   const json = await response.json();
 
   const schema = z.object({
+    id: z.number(),
     weather: z.array(z.object({
       main: z.string(),
       description: z.string(),
@@ -48,6 +49,7 @@ export const getWeather = implementGetWeather(async () => {
       main: weather.main,
       pressure: validation.data.main.pressure,
       temperature: validation.data.main.temp,
+      identifier: validation.data.id,
     },
   };
 });
