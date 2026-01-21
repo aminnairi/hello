@@ -6,8 +6,15 @@ export const applicationSchema = z.array(z.object({
   url: z.string(),
 }));
 
-export const getApplicationsOutputSchema = z.object({
-  applications: applicationSchema,
-});
+export const getApplicationsOutputSchema = z.union([
+  z.object({
+    success: z.literal(true),
+    applications: applicationSchema,
+  }),
+  z.object({
+    success: z.literal(false),
+    error: z.literal("Unauthenticated"),
+  }),
+]);
 
 export type Applications = z.infer<typeof applicationSchema>;
