@@ -1,4 +1,4 @@
-import { implementGetApplications } from "../routes"
+import { implementGetApplications } from "../routes/getApplications";
 import { settings } from "../settings"
 
 export const getApplications = implementGetApplications(async () => {

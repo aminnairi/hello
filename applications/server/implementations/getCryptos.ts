@@ -1,4 +1,4 @@
-import { implementGetCryptos } from "../routes";
+import { implementGetCryptos } from "../routes/getCryptos";
 import { cryptosSchema } from "../schema";
 import { settings } from "../settings";
 

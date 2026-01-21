@@ -1,6 +1,6 @@
 import z from "zod";
-import { implementGetWeather } from "../routes";
 import { settings } from "../settings";
+import { implementGetWeather } from "../routes/getWeather";
 
 export const getWeather = implementGetWeather(async () => {
   if (!settings.openweathermap) {
