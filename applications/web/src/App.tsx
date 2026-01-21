@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
+import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
@@ -533,6 +533,13 @@ function App() {
                 </List>
               </Zoom>
             </CardContent>
+            {!loadingCryptos && (
+              <CardActions>
+                <Button component={Link} href="https://www.binance.com/markets/overview" target="blank">
+                  More
+                </Button>
+              </CardActions>
+            )}
           </Card>
           <Card>
             <CardContent>
