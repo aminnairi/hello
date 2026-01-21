@@ -1,12 +1,5 @@
 import z from "zod";
 
-export const cryptoSchema = z.object({
-  symbol: z.string(),
-  price: z.coerce.number(),
-});
-
-export const cryptosSchema = z.array(cryptoSchema);
-
 export const applicationsSettingsSchema = z.array(z.object({
   name: z.string(),
   url: z.string(),
@@ -31,4 +24,3 @@ export const settingsSchema = z.object({
 
 export type Applications = z.infer<typeof applicationsSettingsSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
-export type Cryptos = z.infer<typeof cryptosSchema>;
