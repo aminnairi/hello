@@ -7,7 +7,7 @@ export const cryptoSchema = z.object({
 
 export const cryptosSchema = z.array(cryptoSchema);
 
-export const applicationsSchema = z.array(z.object({
+export const applicationsSettingsSchema = z.array(z.object({
   name: z.string(),
   url: z.string(),
 }));
@@ -17,18 +17,18 @@ export const settingsCryptoSchema = z.array(z.object({
   ticker: z.string(),
 }));
 
-export const openweathermapSchema = z.object({
+export const openweathermapSettingsSchema = z.object({
   apiKey: z.string(),
   city: z.string(),
   language: z.string(),
 }).optional();
 
 export const settingsSchema = z.object({
-  applications: applicationsSchema,
+  applications: applicationsSettingsSchema,
   crypto: settingsCryptoSchema,
-  openweathermap: openweathermapSchema,
+  openweathermap: openweathermapSettingsSchema,
 });
 
-export type Applications = z.infer<typeof applicationsSchema>;
+export type Applications = z.infer<typeof applicationsSettingsSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
 export type Cryptos = z.infer<typeof cryptosSchema>;
