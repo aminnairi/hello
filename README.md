@@ -145,9 +145,9 @@ docker compose down --remove-orphans --volumes --timeout 0
 > [!NOTE]
 > This won't remove any bind mount, only logical volumes if any are unused or orphans
 
-### `settings.json`
+### Settings
 
-Settings is an object containing all the necessary parameters for the application to function properly.
+The `settings.json` file contains an object that gathers all the necessary parameters for the application to function properly.
 
 #### Errors
 
