@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
+import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
@@ -312,7 +312,7 @@ function App() {
   }, []);
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="xs" sx={{ paddingBottom: "80px" }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AppBar position="fixed">
@@ -578,13 +578,11 @@ function App() {
               </Zoom>
             </CardContent>
           </Card>
-          <Typography align="center">
-            {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
-              <Typography align="center" variant="body1">
-                Type <Chip icon={<Search />} size="small" label="Enter" onClick={openSearchEngine} clickable /> to search for « {search} » using Google.
-              </Typography>
-            )}
-          </Typography>
+          {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
+            <Alert severity="info">
+              Type <Chip icon={<Search />} size="small" label="Enter" onClick={openSearchEngine} clickable /> to search for « {search} » using Google.
+            </Alert>
+          )}
         </Stack>
       </ThemeProvider>
     </Container>
