@@ -288,6 +288,9 @@ The `name` property allow you to define the name dispayed for a crypto in the We
 
 The `weather` property allow you to define parameters that will be used for fetching the current weather from Open Weather Map.
 
+> [!TIP]
+> This property is optional and you can remove it entirely from your configuration if you don't need any weather informations.
+
 ```jsonc
 {
   "weather": {
