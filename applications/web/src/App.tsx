@@ -203,6 +203,14 @@ function App() {
     window.open(`https://google.com/search?q=${search}`);
   }, [search]);
 
+  const onTitleClick = useCallback(() => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  }, []);
+
   useEffect(() => {
     new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
       request("getApplications", null).then(response => {
@@ -350,7 +358,9 @@ function App() {
                     <Menu sx={{ color: theme.palette.common.white }} />
                   </IconButton>
                 </Tooltip>
-                <Typography align="center" variant="h6" flex="1">Hello</Typography>
+                <Typography align="center" variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
+                  Hello
+                </Typography>
                 <Tooltip title="Search">
                   <IconButton onClick={withVibration(onSearchIconButtonClick)}>
                     <Search sx={{ color: theme.palette.common.white }} />
