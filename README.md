@@ -149,6 +149,15 @@ docker compose down --remove-orphans --volumes --timeout 0
 
 Settings is an object containing all the necessary parameters for the application to function properly.
 
+#### Errors
+
+If you are ever unsure for whether the `settings.json` file you have provided is correct or not (after an update for instance), feel free to run the `docker compose logs hello-server` command in order to display the errors that will be printed out in the terminal if any.
+
+If you don't see any errors, congrats: Your settings have been parsed and read correctly!
+
+> [!IMPORTANT]
+> The `settings.json` file is not watched for changes, so if you ever need to update your `settings.json` file, restart the service before running the Web application again.
+
 ```jsonc
 {
   //...
