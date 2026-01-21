@@ -24,21 +24,26 @@ function App() {
   const searchRef = useRef<HTMLInputElement>(null);
 
   const filteredApplications = useMemo(() => {
+    const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
+
     return applications.filter(application => {
-      return application.name.trim().toLowerCase().split(/\s+/).every(applicationNameWord => {
-        return search.trim().toLowerCase().split(/\s+/).some(searchWord => {
-          return applicationNameWord.includes(searchWord);
-        });
+      const applicationName = application.name.toLowerCase();
+
+      return searchWords.every(searchWord => {
+        return applicationName.includes(searchWord);
       });
     });
   }, [applications, search]);
 
+
   const filteredCryptos = useMemo(() => {
+    const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
+
     return cryptos.filter(crypto => {
-      return crypto.symbol.trim().toLowerCase().split(/\s+/).every(cryptoNameWord => {
-        return search.trim().toLowerCase().split(/\s+/).some(searchWord => {
-          return cryptoNameWord.includes(searchWord);
-        });
+      const searchableString = crypto.symbol.toLowerCase();
+
+      return searchWords.every(searchWord => {
+        return searchableString.includes(searchWord);
       });
     });
   }, [cryptos, search]);
