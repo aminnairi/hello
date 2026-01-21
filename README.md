@@ -6,18 +6,16 @@ Minimalist self-hosted dashboard
 
 <img style="width: 50%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-dark.png" /><img style="width: 50%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-light.png" />
 
-## Features
+## Why Choose This Dashboard?
 
-- Configurable: display apps, cryptos, stocks & weather
-- Installable: made as a Web App for being installed either on desktop or mobile
-- Search for apps, stocks & cryptos
-- Fallback to using Google when no matching apps/stocks/cryptos
-- Light & Dark theme based on the user's operating system preferences
-- Haptic feedback when suported by the device
-- Animations when fetching datas
-- Responsive for all devices (smartphone, tablet, desktop)
-- Containerized for ease of deployment
-- Free forever
+- **Fully Tailorable**: Effortlessly curate your workspace with apps, crypto, stocks, and weather.
+- **Native Feel (PWA)**: Install it instantly on desktop or mobile for a seamless, app-like experience.
+- **Smart Universal Search**: Quickly find assets or trigger a Google fallback when you need broader results.
+- **Adaptive UI**: Beautiful Light and Dark themes that sync automatically with your system settings.
+- **Tactile & Fluid**: Experience the interface through haptic feedback and smooth data-fetching animations.
+- **Universal Responsiveness**: Precision-engineered to look stunning on smartphones, tablets, and desktops.
+- **Instant Deployment**: Fully containerized, ensuring a "plug-and-play" setup in any environment.
+- **Permanently Free**: Professional-grade performance at zero cost, forever.
 
 ## Usage
 
