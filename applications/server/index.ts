@@ -3,6 +3,7 @@ import { routes } from "./routes";
 import { getCryptos } from "./implementations/getCryptos";
 import { getWeather } from "./implementations/getWeather";
 import { getApplications } from "./implementations/getApplication";
+import { signIn } from "./implementations/signIn";
 
 const server = createHTTPServer({
   routes,
@@ -10,6 +11,7 @@ const server = createHTTPServer({
     getApplications,
     getCryptos,
     getWeather,
+    signIn,
   },
 });
 
