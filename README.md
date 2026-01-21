@@ -2,6 +2,8 @@
 
 Minimalist self-hosted dashboard
 
+[![License](https://img.shields.io/github/license/aminnairi/hello)](./LICENSE) [![Web Container](https://badgen.net/badge/container/hello-web:0.1.0/blue?icon=github)](https://github.com/aminnairi/hello/pkgs/container/hello-web) [![Web Container](https://badgen.net/badge/container/hello-server:0.1.0/blue?icon=github)](https://github.com/aminnairi/hello/pkgs/container/hello-server)
+
 <img style="width: 50%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-dark.png" /><img style="width: 50%; margin: 10px auto; display: inline-block;" src="./applications/web/public/screenshot-narrow-light.png" />
 
 ## Features
