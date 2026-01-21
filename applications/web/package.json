@@ -11,6 +11,7 @@
     "start": "serve --listen tcp://0.0.0.0:8001 --single --no-clipboard --no-port-switching dist"
   },
   "dependencies": {
+    "@aminnairi/react-signal": "^2.0.1",
     "@aminnairi/rpc-web": "^0.1.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
