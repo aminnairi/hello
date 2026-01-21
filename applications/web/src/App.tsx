@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
-import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed } from "@mui/icons-material";
+import { AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
+import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
 import { routes } from "@hello/server/routes";
@@ -13,13 +13,14 @@ function App() {
   const [loadingApplications, setLoadingApplications] = useState(true);
   const [cryptos, setCryptos] = useState<Cryptos>([]);
   const [loadingCryptos, setLoadingCryptos] = useState(true);
-  const [mode, setMode] = useState<PaletteMode>(window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   const [drawerOpened, setDrawerOpened] = useState(false);
   const [searchOpened, setSearchOpened] = useState(false);
   const [search, setSearch] = useState("");
   const [weather, setWeather] = useState<Weather | null>(null);
   const [weatherLoading, setWeatherLoading] = useState(true);
   const [date, setDate] = useState(new Date());
+  const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const [mode, setMode] = useState<PaletteMode | "auto">("auto");
   const searchRef = useRef<HTMLInputElement>(null);
 
   const filteredApplications = useMemo(() => {
@@ -48,34 +49,32 @@ function App() {
   }), []);
 
   const theme = useMemo(() => {
-    if (mode === "light") {
-      return createTheme({
-        palette: {
-          mode: 'light',
-          primary: {
-            main: '#6366f1',
-            light: '#818cf8',
-            dark: '#4f46e5',
-          },
-          secondary: {
-            main: '#10b981',
-          },
-          background: {
-            default: '#f8fafc',
-            paper: '#ffffff',
-          },
-          text: {
-            primary: '#1e293b',
-            secondary: '#64748b',
-          },
+    const lightTheme = createTheme({
+      palette: {
+        mode: 'light',
+        primary: {
+          main: '#6366f1',
+          light: '#818cf8',
+          dark: '#4f46e5',
         },
-        shape: {
-          borderRadius: 12,
+        secondary: {
+          main: '#10b981',
         },
-      });
-    }
+        background: {
+          default: '#f8fafc',
+          paper: '#ffffff',
+        },
+        text: {
+          primary: '#1e293b',
+          secondary: '#64748b',
+        },
+      },
+      shape: {
+        borderRadius: 12,
+      },
+    });
 
-    return createTheme({
+    const darkTheme = createTheme({
       palette: {
         mode: 'dark',
         primary: {
@@ -106,7 +105,17 @@ function App() {
         },
       },
     })
-  }, [mode]);
+
+    if (mode === "auto") {
+      return isDarkMode ? darkTheme : lightTheme;
+    }
+
+    if (mode === "dark") {
+      return darkTheme;
+    }
+
+    return lightTheme;
+  }, [isDarkMode, mode]);
 
   const withVibration = useCallback(<Input, Output>(fn: (...input: Input[]) => Output) => {
     return (...input: Input[]): Output => {
@@ -158,11 +167,15 @@ function App() {
 
   const onModeIconButtonClick = useCallback(() => {
     setMode(previousMode => {
-      if (previousMode === "light") {
-        return "dark";
+      if (previousMode === "dark") {
+        return "auto";
       }
 
-      return "light";
+      if (previousMode === "auto") {
+        return "light";
+      }
+
+      return "dark";
     });
   }, []);
 
@@ -336,7 +349,11 @@ function App() {
                   <Search sx={{ color: theme.palette.common.white }} />
                 </IconButton>
                 <IconButton onClick={withVibration(onModeIconButtonClick)}>
-                  {mode === "light" ? <LightMode sx={{ color: theme.palette.common.white }} /> : <DarkMode sx={{ color: theme.palette.common.white }} />}
+                  {mode === "light"
+                    ? <LightMode sx={{ color: theme.palette.common.white }} />
+                    : mode === "dark"
+                      ? <DarkMode sx={{ color: theme.palette.common.white }} />
+                      : <BrightnessAuto sx={{ color: theme.palette.common.white }} />}
                 </IconButton>
               </Fragment>
             )}
