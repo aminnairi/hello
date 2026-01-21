@@ -1,14 +1,19 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react"
+import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
+import { Notification } from "./components/Notification";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
 import { routes } from "@hello/server/routes";
 import type { Weather } from "@hello/server/routes/getWeather/output";
 import type { Applications } from "@hello/server/routes/getApplications/output";
 import type { Cryptos } from "@hello/server/routes/getCryptos/output";
+import { useNotification } from "./hooks/useNotification";
 
 function App() {
+  const [token, setToken] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
   const [applications, setApplications] = useState<Applications>([]);
   const [loadingApplications, setLoadingApplications] = useState(true);
   const [cryptos, setCryptos] = useState<Cryptos>([]);
@@ -21,7 +26,10 @@ function App() {
   const [date, setDate] = useState(new Date());
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [mode, setMode] = useState<PaletteMode | "auto">("auto");
+  const { openSuccessNotification, openErrorNotification } = useNotification();
   const searchRef = useRef<HTMLInputElement>(null);
+
+  const signInModalOpened = useMemo(() => token.trim().length === 0, [token]);
 
   const filteredApplications = useMemo(() => {
     const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
@@ -35,6 +43,13 @@ function App() {
     });
   }, [applications, search]);
 
+  const onUserNameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setUserName(event.target.value);
+  }, []);
+
+  const onPasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  }, []);
 
   const filteredCryptos = useMemo(() => {
     const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
@@ -216,11 +231,17 @@ function App() {
     });
   }, []);
 
-  useEffect(() => {
+  const getApplications = useCallback(() => {
     new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
-      request("getApplications", null).then(response => {
+      request("getApplications", {
+        token
+      }).then(response => {
         if (response instanceof Error) {
-          throw new Error
+          return;
+        }
+
+        if (!response.success) {
+          return;
         }
 
         setApplications(response.applications);
@@ -228,13 +249,19 @@ function App() {
         setLoadingApplications(false);
       });
     });
-  }, [request]);
+  }, [request, token]);
 
-  useEffect(() => {
+  const getCryptos = useCallback(() => {
     new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
-      request("getCryptos", null).then(response => {
+      request("getCryptos", {
+        token,
+      }).then(response => {
         if (response instanceof Error) {
-          throw new Error
+          return;
+        }
+
+        if (!response.success) {
+          return;
         }
 
         setCryptos(response.cryptos);
@@ -242,7 +269,57 @@ function App() {
         setLoadingCryptos(false);
       });
     })
-  }, [request]);
+  }, [request, token]);
+
+  const getWeather = useCallback(() => {
+    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
+      request("getWeather", {
+        token,
+      }).then(response => {
+        if (response instanceof Error) {
+          return;
+        }
+
+        if (!response.success) {
+          return;
+        }
+
+        setWeather(response.weather);
+      }).finally(() => {
+        setWeatherLoading(false);
+      });
+    });
+  }, [request, token]);
+
+  const onSignInFormSubmitted = useCallback((event: FormEvent) => {
+    event.preventDefault();
+
+    request("signIn", {
+      userName,
+      password,
+    }).then(response => {
+      if (response instanceof Error) {
+        openErrorNotification("Error while signing in, invalid credentials");
+        return;
+      }
+
+      if (!response.success) {
+        openErrorNotification("Error while signing in, invalid credentials");
+        return;
+      }
+
+      openSuccessNotification("Successfully signed in!");
+      setToken(response.token);
+    });
+  }, [request, userName, password, openSuccessNotification, openErrorNotification]);
+
+  useEffect(() => {
+    getApplications();
+  }, [getApplications]);
+
+  useEffect(() => {
+    getCryptos();
+  }, [getCryptos]);
 
   useEffect(() => {
     if (searchOpened) {
@@ -289,22 +366,8 @@ function App() {
   }, [searchOpened]);
 
   useEffect(() => {
-    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
-      request("getWeather", null).then(response => {
-        if (response instanceof Error) {
-          return;
-        }
-
-        if (!response.success) {
-          return;
-        }
-
-        setWeather(response.weather);
-      }).finally(() => {
-        setWeatherLoading(false);
-      });
-    });
-  }, [request]);
+    getWeather();
+  }, [getWeather]);
 
   useEffect(() => {
     const intervalIdentifier = setInterval(() => {
@@ -315,6 +378,12 @@ function App() {
       clearInterval(intervalIdentifier);
     };
   }, []);
+
+  useEffect(() => {
+    getCryptos();
+    getApplications();
+    getWeather();
+  }, [getApplications, getCryptos, getWeather, token]);
 
   return (
     <Container maxWidth="xs" sx={{ paddingBottom: "80px" }}>
@@ -603,6 +672,20 @@ function App() {
             </Alert>
           )}
         </Stack>
+        <Modal open={signInModalOpened} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
+          <Card sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+            <CardContent>
+              <Stack component="form" spacing={3} onSubmit={onSignInFormSubmitted}>
+                <TextField label="User Name" size="small" value={userName} onChange={onUserNameChange} />
+                <TextField label="Password" type="password" size="small" value={password} onChange={onPasswordChange} />
+                <Button size="small" variant="contained" sx={{ alignSelf: "center" }} type="submit">
+                  Sign In
+                </Button>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Modal>
+        <Notification />
       </ThemeProvider>
     </Container>
   )
