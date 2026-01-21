@@ -145,6 +145,190 @@ docker compose down --remove-orphans --volumes --timeout 0
 > [!NOTE]
 > This won't remove any bind mount, only logical volumes if any are unused or orphans
 
+### `settings.json`
+
+Settings is an object containing all the necessary parameters for the application to function properly.
+
+```jsonc
+{
+  //...
+}
+```
+
+#### Applications
+
+The `applications` key is an array containing all of the application definition to be displayed on the screen.
+
+```jsonc
+{
+  //...
+  "applications": [
+    //...
+  ],
+}
+```
+
+##### Application
+
+Each application is an object containing a set of properties that you can define to customize the display on the Web application.
+
+```jsonc
+{
+  //...
+  "applications": [
+    {
+      //...
+    },
+  ],
+}
+```
+
+###### Name
+
+Each application must have a name that is display in the application list of the Web application.
+
+```jsonc
+{
+  //...
+  "applications": [
+    {
+      "name": "Excalidraw",
+      //...
+    },
+  ],
+}
+```
+
+###### URL
+
+Each application must have a URL that is used to redirect when clicked in the application list of the Web application.
+
+```jsonc
+{
+  //...
+  "applications": [
+    {
+      "url": "https://excalidraw.com",
+      //...
+    },
+  ],
+}
+```
+
+#### Cryptos
+
+The `cryptos` proprety is an array allowing you to define a set of Cryptocurrencies to be displayed on the Web application with its name and current price. The data is fetched from the public Binance API.
+
+```jsonc
+{
+  //...
+  "cryptos": [
+    //...
+  ],
+}
+```
+
+##### Crypto
+
+Each crypto is an object that allows for defining their parameters before the request to Binance is done.
+
+```jsonc
+{
+  //...
+  "cryptos": [
+    {
+      //...
+    },
+  ],
+}
+```
+
+###### Ticker
+
+The `ticker` property allow you to define the ticker used for a crypto, for instance `BTC` for Bitcoin, `ETH` for Ethereum, etc...
+
+```jsonc
+{
+  //...
+  "cryptos": [
+    {
+      "ticker": "BTC",
+      //...
+    },
+  ],
+}
+```
+
+###### Name
+
+The `name` property allow you to define the name dispayed for a crypto in the Web application, useful if you want to name it something more friendly like `Bitcoin` instead of `BTC`.
+
+```jsonc
+{
+  //...
+  "cryptos": [
+    {
+      "name": "Bitcoin",
+      //...
+    },
+  ],
+}
+```
+
+#### Weather
+
+The `weather` property allow you to define parameters that will be used for fetching the current weather from Open Weather Map.
+
+```jsonc
+{
+  "weather": {
+    //...
+  },
+}
+```
+
+##### API Key
+
+The `apiKey` property allow you to define the key used to fetch the weather data. You'll need to create an account and then create an API key that you can then fill in this property.
+
+```jsonc
+{
+  //...
+  "weather": {
+    "apiKey": "ebfghdi...",
+    //...
+  },
+}
+```
+
+##### language
+
+The `language` property allow you to define the lang used to translate the weather data.
+
+```jsonc
+{
+  //...
+  "weather": {
+    //...
+    "language": "fr",
+  },
+}
+```
+
+##### language
+
+The `city` property allow you to define the city for which the weather data will be gathered.
+
+```jsonc
+{
+  //...
+  "weather": {
+    //...
+    "city": "Paris",
+  },
+}
+```
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
