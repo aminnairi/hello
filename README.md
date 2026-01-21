@@ -313,7 +313,7 @@ The `apiKey` property allow you to define the key used to fetch the weather data
 }
 ```
 
-##### language
+##### Language
 
 The `language` property allow you to define the lang used to translate the weather data.
 
@@ -327,7 +327,7 @@ The `language` property allow you to define the lang used to translate the weath
 }
 ```
 
-##### language
+##### City
 
 The `city` property allow you to define the city for which the weather data will be gathered.
 
