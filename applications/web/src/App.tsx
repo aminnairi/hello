@@ -589,6 +589,13 @@ function App() {
                 </List>
               </Zoom>
             </CardContent>
+            {!loadingApplications && (
+              <CardActions>
+                <Button component={Link} href="https://selfh.st/apps/" target="blank">
+                  More
+                </Button>
+              </CardActions>
+            )}
           </Card>
           {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
             <Alert severity="info">
