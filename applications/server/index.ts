@@ -14,5 +14,5 @@ const server = createHTTPServer({
 });
 
 server.listen(8000, "0.0.0.0", () => {
-  console.log("server listening");
+  console.log(`[HELLO-SERVER] HTTP server listening on http://0.0.0.0:8000`);
 });
