@@ -1,26 +1,26 @@
 import z from "zod";
 
 export const applicationsSettingsSchema = z.array(z.object({
-  name: z.string(),
-  url: z.string(),
-}));
+  name: z.string({ error: "it should be a string" }),
+  url: z.url({ error: "it should be a valid URL" }),
+}, { error: "it should be an object" }), { error: "it should be an array" });
 
 export const settingsCryptoSchema = z.array(z.object({
-  name: z.string(),
-  ticker: z.string(),
-}));
+  name: z.string({ error: "it should be a string" }),
+  ticker: z.string({ error: "it should be a string" }),
+}, { error: "it should be an object" }), { error: "it should be an array" });
 
 export const openweathermapSettingsSchema = z.object({
-  apiKey: z.string(),
-  city: z.string(),
-  language: z.string(),
-}).optional();
+  apiKey: z.string({ error: "it should be a string" }),
+  city: z.string({ error: "it should be a string" }),
+  language: z.string({ error: "it should be a string" }),
+}, { error: "it should be an object" }).optional();
 
 export const settingsSchema = z.object({
   applications: applicationsSettingsSchema,
   crypto: settingsCryptoSchema,
   openweathermap: openweathermapSettingsSchema,
-});
+}, { error: "it should be an object" });
 
 export type Applications = z.infer<typeof applicationsSettingsSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
