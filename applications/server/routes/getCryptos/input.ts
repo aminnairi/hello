@@ -1,3 +1,5 @@
 import z from "zod";
 
-export const getCryptosInputSchema = z.null();
+export const getCryptosInputSchema = z.object({
+  token: z.string(),
+});
