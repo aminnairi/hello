@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
-import { AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
+import { AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
@@ -326,14 +326,18 @@ function App() {
                         color: theme.palette.common.white
                       },
                       endAdornment: (
-                        <IconButton onClick={withVibration(onCloseEndAdornmentClick)}>
-                          <Close sx={{ color: theme.palette.common.white }} />
-                        </IconButton>
+                        <Tooltip title="Clearn">
+                          <IconButton onClick={withVibration(onCloseEndAdornmentClick)}>
+                            <Close sx={{ color: theme.palette.common.white }} />
+                          </IconButton>
+                        </Tooltip>
                       ),
                       startAdornment: (
-                        <IconButton onClick={withVibration(onArrowLeftIconButtonClick)}>
-                          <ArrowBack sx={{ color: theme.palette.common.white }} />
-                        </IconButton>
+                        <Tooltip title="Cancel">
+                          <IconButton onClick={withVibration(onArrowLeftIconButtonClick)}>
+                            <ArrowBack sx={{ color: theme.palette.common.white }} />
+                          </IconButton>
+                        </Tooltip>
                       )
                     }
                   }}
@@ -341,20 +345,26 @@ function App() {
               </Fragment>
             ) : (
               <Fragment>
-                <IconButton onClick={withVibration(onMenuIconButtonClick)}>
-                  <Menu sx={{ color: theme.palette.common.white }} />
-                </IconButton>
+                <Tooltip title="About">
+                  <IconButton onClick={withVibration(onMenuIconButtonClick)}>
+                    <Menu sx={{ color: theme.palette.common.white }} />
+                  </IconButton>
+                </Tooltip>
                 <Typography align="center" variant="h6" flex="1">Hello</Typography>
-                <IconButton onClick={withVibration(onSearchIconButtonClick)}>
-                  <Search sx={{ color: theme.palette.common.white }} />
-                </IconButton>
-                <IconButton onClick={withVibration(onModeIconButtonClick)}>
-                  {mode === "light"
-                    ? <LightMode sx={{ color: theme.palette.common.white }} />
-                    : mode === "dark"
-                      ? <DarkMode sx={{ color: theme.palette.common.white }} />
-                      : <BrightnessAuto sx={{ color: theme.palette.common.white }} />}
-                </IconButton>
+                <Tooltip title="Search">
+                  <IconButton onClick={withVibration(onSearchIconButtonClick)}>
+                    <Search sx={{ color: theme.palette.common.white }} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Toggle">
+                  <IconButton onClick={withVibration(onModeIconButtonClick)}>
+                    {mode === "light"
+                      ? <LightMode sx={{ color: theme.palette.common.white }} />
+                      : mode === "dark"
+                        ? <DarkMode sx={{ color: theme.palette.common.white }} />
+                        : <BrightnessAuto sx={{ color: theme.palette.common.white }} />}
+                  </IconButton>
+                </Tooltip>
               </Fragment>
             )}
           </Toolbar>
