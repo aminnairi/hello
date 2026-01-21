@@ -1,11 +1,12 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
 import { AppBar, Card, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Typography, Zoom, type PaletteMode } from "@mui/material";
-import type { Applications } from "@hello/server/schema";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed } from "@mui/icons-material";
 import type { Cryptos } from "@hello/server/schema"
 import { ThemeProvider } from "@emotion/react";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
-import { routes, type Weather } from "@hello/server/routes";
+import { routes } from "@hello/server/routes";
+import type { Weather } from "@hello/server/routes/getWeather/output";
+import type { Applications } from "@hello/server/routes/getApplications/output";
 
 function App() {
   const [applications, setApplications] = useState<Applications>([]);
@@ -467,8 +468,8 @@ function App() {
                   ) : (
                     <Zoom appear in={true}>
                       <Stack>
-                        {filteredApplications.map((application, index) => (
-                          <ListItem key={index}>
+                        {filteredApplications.map((application) => (
+                          <ListItem key={application.identifier}>
                             <ListItemButton onClick={onApplicationListItemButtonClicked(application.url)}>
                               <ListItemIcon>
                                 <Public />
