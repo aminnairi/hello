@@ -476,7 +476,7 @@ function App() {
                     <Stack spacing={3} justifyContent="center" alignItems="center">
                       <Opacity />
                       <Typography variant="body1" align="center">
-                        {weather.humidity} mm³
+                        {weather.humidity} %
                       </Typography>
                     </Stack>
                     <Stack spacing={3} justifyContent="center" alignItems="center">
