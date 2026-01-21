@@ -1,5 +1,11 @@
 import z from "zod";
 
+export const authenticationSettingSchema = z.object({
+  userName: z.string({ error: "it should be a string" }),
+  hashedPassword: z.string({ error: "it should be a string" }),
+  jsonWebTokenSecret: z.string({ error: "it should be a string" }),
+}, { error: "it should be an object" }).optional();
+
 export const applicationsSettingsSchema = z.array(z.object({
   name: z.string({ error: "it should be a string" }),
   url: z.url({ error: "it should be a valid URL" }),
@@ -17,6 +23,7 @@ export const openweathermapSettingsSchema = z.object({
 }, { error: "it should be an object" }).optional();
 
 export const settingsSchema = z.object({
+  authentication: authenticationSettingSchema,
   applications: applicationsSettingsSchema,
   crypto: settingsCryptoSchema,
   openweathermap: openweathermapSettingsSchema,
