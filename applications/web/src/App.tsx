@@ -700,7 +700,7 @@ function App() {
           <Card sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", outline: "none" }}>
             <CardContent>
               <Stack component="form" spacing={3} onSubmit={onSignInFormSubmitted}>
-                <TextField label="User Name" size="small" value={userName} onChange={onUserNameChange} disabled={signInLoading} />
+                <TextField label="User Name" size="small" value={userName} onChange={onUserNameChange} disabled={signInLoading} autoFocus />
                 <TextField label="Password" type="password" size="small" value={password} onChange={onPasswordChange} disabled={signInLoading} />
                 <Button size="small" variant="contained" sx={{ alignSelf: "center" }} type="submit" loading={signInLoading}>
                   Sign In
