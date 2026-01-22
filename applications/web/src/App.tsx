@@ -1,6 +1,6 @@
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react"
+import { Fragment, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react"
 import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
-import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto } from "@mui/icons-material";
+import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto, Logout } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { Notification } from "./components/Notification";
 import { createHTTPRequest } from "@aminnairi/rpc-web";
@@ -26,6 +26,7 @@ function App() {
   const [date, setDate] = useState(new Date());
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [mode, setMode] = useState<PaletteMode | "auto">("auto");
+  const [signInLoading, setSignInLoading] = useState(false);
   const { openSuccessNotification, openErrorNotification } = useNotification();
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -232,6 +233,8 @@ function App() {
   }, []);
 
   const getApplications = useCallback(() => {
+    setLoadingApplications(true);
+
     new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
       request("getApplications", {
         token
@@ -252,6 +255,8 @@ function App() {
   }, [request, token]);
 
   const getCryptos = useCallback(() => {
+    setLoadingCryptos(true);
+
     new Promise(resolve => setTimeout(resolve, 1_000)).then(() => {
       request("getCryptos", {
         token,
@@ -272,6 +277,8 @@ function App() {
   }, [request, token]);
 
   const getWeather = useCallback(() => {
+    setWeatherLoading(true);
+
     new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
       request("getWeather", {
         token,
@@ -294,32 +301,44 @@ function App() {
   const onSignInFormSubmitted = useCallback((event: FormEvent) => {
     event.preventDefault();
 
-    request("signIn", {
-      userName,
-      password,
-    }).then(response => {
-      if (response instanceof Error) {
-        openErrorNotification("Error while signing in, invalid credentials");
-        return;
-      }
+    setSignInLoading(true);
 
-      if (!response.success) {
-        openErrorNotification("Error while signing in, invalid credentials");
-        return;
-      }
+    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
+      request("signIn", {
+        userName,
+        password,
+      }).then(response => {
+        if (response instanceof Error) {
+          openErrorNotification("Error while signing in, invalid credentials");
+          return;
+        }
 
-      openSuccessNotification("Successfully signed in!");
-      setToken(response.token);
+        if (!response.success) {
+          openErrorNotification("Error while signing in, invalid credentials");
+          return;
+        }
+
+        openSuccessNotification("Successfully signed in!");
+        setToken(response.token);
+      }).finally(() => {
+        setSignInLoading(false);
+      });
     });
   }, [request, userName, password, openSuccessNotification, openErrorNotification]);
 
-  useEffect(() => {
-    getApplications();
-  }, [getApplications]);
-
-  useEffect(() => {
-    getCryptos();
-  }, [getCryptos]);
+  const onLogoutButtonClick = useCallback(() => {
+    setToken("");
+    setApplications([]);
+    setCryptos([]);
+    setWeather({
+      main: "",
+      pressure: 0,
+      description: "",
+      humidity: 0,
+      identifier: 0,
+      temperature: 0,
+    });
+  }, []);
 
   useEffect(() => {
     if (searchOpened) {
@@ -366,10 +385,6 @@ function App() {
   }, [searchOpened]);
 
   useEffect(() => {
-    getWeather();
-  }, [getWeather]);
-
-  useEffect(() => {
     const intervalIdentifier = setInterval(() => {
       setDate(new Date());
     }, 1000);
@@ -379,11 +394,15 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
+  const effectEvent = useEffectEvent(() => {
     getCryptos();
     getApplications();
     getWeather();
-  }, [getApplications, getCryptos, getWeather, token]);
+  });
+
+  useEffect(() => {
+    effectEvent();
+  }, [token]);
 
   return (
     <Container maxWidth="xs" sx={{ paddingBottom: "80px" }}>
@@ -435,6 +454,11 @@ function App() {
                 <Typography align="center" variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
                   Hello
                 </Typography>
+                <Tooltip title="Logout">
+                  <IconButton onClick={withVibration(onLogoutButtonClick)}>
+                    <Logout sx={{ clor: theme.palette.common.white }} />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip title="Search">
                   <IconButton onClick={withVibration(onSearchIconButtonClick)}>
                     <Search sx={{ color: theme.palette.common.white }} />
@@ -673,12 +697,12 @@ function App() {
           )}
         </Stack>
         <Modal open={signInModalOpened} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
-          <Card sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+          <Card sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", outline: "none" }}>
             <CardContent>
               <Stack component="form" spacing={3} onSubmit={onSignInFormSubmitted}>
-                <TextField label="User Name" size="small" value={userName} onChange={onUserNameChange} />
-                <TextField label="Password" type="password" size="small" value={password} onChange={onPasswordChange} />
-                <Button size="small" variant="contained" sx={{ alignSelf: "center" }} type="submit">
+                <TextField label="User Name" size="small" value={userName} onChange={onUserNameChange} disabled={signInLoading} />
+                <TextField label="Password" type="password" size="small" value={password} onChange={onPasswordChange} disabled={signInLoading} />
+                <Button size="small" variant="contained" sx={{ alignSelf: "center" }} type="submit" loading={signInLoading}>
                   Sign In
                 </Button>
               </Stack>
