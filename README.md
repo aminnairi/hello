@@ -102,13 +102,13 @@ services:
   hello-server:
     container_name: hello-server
     restart: unless-stopped
-    image: ghcr.io/aminnairi/hello-server:0.1.0
+    image: ghcr.io/aminnairi/hello/server:0.1.0
     volumes:
       - ./settings.json:/home/node/settings.json
   hello-web:
     container_name: hello-web
     restart: unless-stopped
-    image: ghcr.io/aminnairi/hello-web:0.1.0
+    image: ghcr.io/aminnairi/hello/web:0.1.0
     depends_on:
       - hello-server
   hello-proxy:

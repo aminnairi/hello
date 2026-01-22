@@ -1,9 +1,9 @@
 services:
   hello-server:
-    image: ghcr.io/aminnairi/hello-server:0.1.0
+    image: ghcr.io/aminnairi/hello/server:0.1.0
     build:
       target: server
   hello-web:
-    image: ghcr.io/aminnairi/hello-web:0.1.0
+    image: ghcr.io/aminnairi/hello/web:0.1.0
     build:
       target: web
