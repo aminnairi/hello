@@ -4,6 +4,7 @@ import { BugReport, Code, Favorite, OpenInNew } from "@mui/icons-material";
 
 export const Sidebar = () => {
   const { drawerOpened, closeDrawer } = useDrawer();
+
   return (
     <Drawer open={drawerOpened} onClose={closeDrawer} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
       <Toolbar>

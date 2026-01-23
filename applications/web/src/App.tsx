@@ -14,12 +14,16 @@ import { DateTime } from "./components/DateTime";
 import { Weather } from "./components/Weather";
 import { Cryptos } from "./components/Cryptos";
 import { Applications } from "./components/Applications";
+import { useMode } from "./hooks/useMode";
+import { useDrawer } from "./hooks/useDrawer";
 
 function App() {
   const { filteredApplications } = useApplications();
   const { filteredCryptos } = useCryptos();
   const { search, searchRef, clearSearch, openSearch, closeSearch, searchOpened } = useSearch();
   const { theme } = useTheme();
+  const { toggleMode } = useMode();
+  const { toggleDrawer } = useDrawer();
 
   const openSearchEngine = useCallback(() => {
     window.open(`https://google.com/search?q=${search}`);
@@ -27,6 +31,24 @@ function App() {
 
   useEffect(() => {
     const onWindowKeydown = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "t") {
+        if (searchOpened) {
+          return;
+        }
+
+        toggleMode();
+        return;
+      }
+
+      if (event.key === "m") {
+        if (searchOpened) {
+          return;
+        }
+
+        toggleDrawer();
+        return;
+      }
+
       if (event.key === "/") {
         if (searchRef.current === document.activeElement) {
           return;
@@ -61,7 +83,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", onWindowKeydown);
     };
-  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef]);
+  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode]);
 
   return (
     <Container maxWidth="xs" sx={{ paddingBottom: "80px" }}>

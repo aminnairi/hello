@@ -1,19 +1,27 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
+import { useDrawerOpenedState } from "../states/useDrawerOpenedState";
 
 export const useDrawer = () => {
-  const [drawerOpened, setDrawerOpened] = useState(false);
+  const [drawerOpened, setDrawerOpened] = useDrawerOpenedState();
 
   const openDrawer = useCallback(() => {
     setDrawerOpened(true);
-  }, []);
+  }, [setDrawerOpened]);
 
   const closeDrawer = useCallback(() => {
-    setDrawerOpened(true);
-  }, []);
+    setDrawerOpened(false);
+  }, [setDrawerOpened]);
+
+  const toggleDrawer = useCallback(() => {
+    setDrawerOpened(previousDrawerOpened => {
+      return !previousDrawerOpened;
+    });
+  }, [setDrawerOpened]);
 
   return {
     drawerOpened,
     openDrawer,
-    closeDrawer
+    closeDrawer,
+    toggleDrawer,
   }
 };
