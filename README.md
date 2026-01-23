@@ -14,6 +14,7 @@ Minimalist self-hosted dashboard
 - **Adaptive UI**: Beautiful Light and Dark themes that sync automatically with your system settings.
 - **Tactile & Fluid**: Experience the interface through haptic feedback and smooth data-fetching animations.
 - **Universal Responsiveness**: Precision-engineered to look stunning on smartphones, tablets, and desktops.
+- **Secure Access**: Protect your dashboard with built-in authentication using a hashed password.
 - **Instant Deployment**: Fully containerized, ensuring a "plug-and-play" setup in any environment.
 - **Permanently Free**: Professional-grade performance at zero cost, forever.
 
@@ -32,6 +33,11 @@ touch settings.json
 
 ```json
 {
+  "authentication": {
+    "userName": "admin",
+    "hashedPassword": "$2b$10$...",
+    "jsonWebTokenSecret": "your-secret-key"
+  },
   "applications": [
     {
       "name": "Excalidraw",
@@ -161,6 +167,60 @@ If you don't see any errors, congrats: Your settings have been parsed and read c
 ```jsonc
 {
   //...
+}
+```
+
+#### Authentication
+
+The `authentication` property allow you to define parameters that will be used for securing the access to the Web application.
+
+> [!TIP]
+> This property is optional and you can remove it entirely from your configuration if you don't need any authentication.
+
+```jsonc
+{
+  "authentication": {
+    //...
+  },
+}
+```
+
+##### User Name
+
+The `userName` property allow you to define the user name that will be used for signing in.
+
+```jsonc
+{
+  "authentication": {
+    "userName": "admin",
+    //...
+  },
+}
+```
+
+##### Hashed Password
+
+The `hashedPassword` property allow you to define the hashed password that will be used for signing in.
+
+```jsonc
+{
+  "authentication": {
+    //...
+    "hashedPassword": "$2b$10$...",
+  },
+}
+```
+
+##### JSON Web Token Secret
+
+The `jsonWebTokenSecret` property allow you to define the secret used for signing the JSON Web Token.
+
+```jsonc
+{
+  "authentication": {
+    //...
+    "jsonWebTokenSecret": "your-secret-key",
+  },
 }
 ```
 
