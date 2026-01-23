@@ -1,19 +1,16 @@
-import { Fragment, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react"
-import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Modal, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
+import { Fragment, useCallback, useEffect, useEffectEvent, useMemo, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react"
+import { Alert, AppBar, Button, Card, CardActions, CardContent, CardHeader, Chip, Container, createTheme, CssBaseline, Drawer, IconButton, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Stack, TextField, Toolbar, Tooltip, Typography, useMediaQuery, Zoom, type PaletteMode } from "@mui/material";
 import { DarkMode, LightMode, OpenInNew, Public, Search, ShowChart, Menu, Code, Favorite, Close, ArrowBack, BugReport, Thermostat, Opacity, Speed, BrightnessAuto, Logout } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { Notification } from "./components/Notification";
-import { createHTTPRequest } from "@aminnairi/rpc-web";
-import { routes } from "@hello/server/routes";
 import type { Weather } from "@hello/server/routes/getWeather/output";
 import type { Applications } from "@hello/server/routes/getApplications/output";
 import type { Cryptos } from "@hello/server/routes/getCryptos/output";
-import { useNotification } from "./hooks/useNotification";
+import { useRequest } from "./hooks/useRequest";
+import { SignInModalForm } from "./components/SignInModalForm";
+import { useToken } from "./hooks/useToken";
 
 function App() {
-  const [token, setToken] = useState("");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
   const [applications, setApplications] = useState<Applications>([]);
   const [loadingApplications, setLoadingApplications] = useState(true);
   const [cryptos, setCryptos] = useState<Cryptos>([]);
@@ -26,11 +23,9 @@ function App() {
   const [date, setDate] = useState(new Date());
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const [mode, setMode] = useState<PaletteMode | "auto">("auto");
-  const [signInLoading, setSignInLoading] = useState(false);
-  const { openSuccessNotification, openErrorNotification } = useNotification();
   const searchRef = useRef<HTMLInputElement>(null);
-
-  const signInModalOpened = useMemo(() => token.trim().length === 0, [token]);
+  const { token, setToken } = useToken();
+  const { request } = useRequest();
 
   const filteredApplications = useMemo(() => {
     const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
@@ -44,14 +39,6 @@ function App() {
     });
   }, [applications, search]);
 
-  const onUserNameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setUserName(event.target.value);
-  }, []);
-
-  const onPasswordChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  }, []);
-
   const filteredCryptos = useMemo(() => {
     const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
 
@@ -63,11 +50,6 @@ function App() {
       });
     });
   }, [cryptos, search]);
-
-  const request = useMemo(() => createHTTPRequest({
-    routes,
-    url: "/api"
-  }), []);
 
   const theme = useMemo(() => {
     const lightTheme = createTheme({
@@ -298,34 +280,6 @@ function App() {
     });
   }, [request, token]);
 
-  const onSignInFormSubmitted = useCallback((event: FormEvent) => {
-    event.preventDefault();
-
-    setSignInLoading(true);
-
-    new Promise(resolve => setTimeout(resolve, 1000)).then(() => {
-      request("signIn", {
-        userName,
-        password,
-      }).then(response => {
-        if (response instanceof Error) {
-          openErrorNotification("Error while signing in, invalid credentials");
-          return;
-        }
-
-        if (!response.success) {
-          openErrorNotification("Error while signing in, invalid credentials");
-          return;
-        }
-
-        openSuccessNotification("Successfully signed in!");
-        setToken(response.token);
-      }).finally(() => {
-        setSignInLoading(false);
-      });
-    });
-  }, [request, userName, password, openSuccessNotification, openErrorNotification]);
-
   const onLogoutButtonClick = useCallback(() => {
     setToken("");
     setApplications([]);
@@ -338,7 +292,7 @@ function App() {
       identifier: 0,
       temperature: 0,
     });
-  }, []);
+  }, [setToken]);
 
   useEffect(() => {
     if (searchOpened) {
@@ -696,19 +650,7 @@ function App() {
             </Alert>
           )}
         </Stack>
-        <Modal open={signInModalOpened} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
-          <Card sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", outline: "none" }}>
-            <CardContent>
-              <Stack component="form" spacing={3} onSubmit={onSignInFormSubmitted}>
-                <TextField label="User Name" size="small" value={userName} onChange={onUserNameChange} disabled={signInLoading} autoFocus />
-                <TextField label="Password" type="password" size="small" value={password} onChange={onPasswordChange} disabled={signInLoading} />
-                <Button size="small" variant="contained" sx={{ alignSelf: "center" }} type="submit" loading={signInLoading}>
-                  Sign In
-                </Button>
-              </Stack>
-            </CardContent>
-          </Card>
-        </Modal>
+        <SignInModalForm />
         <Notification />
       </ThemeProvider>
     </Container>
