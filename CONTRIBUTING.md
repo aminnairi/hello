@@ -2,6 +2,21 @@
 
 Contribution guildelines
 
+## Tech Stack
+
+### Server
+
+- [Node.js](https://nodejs.org)
+- [`@aminnairi/rpc`](https://npmjs.com/package/@aminnairi/rpc)
+- [`@aminnairi/rpc-node`](https://npmjs.com/package/@aminnairi/rpc-node)
+
+### Client
+
+- [React.js](https://react.dev)
+- [`@aminnairi/rpc-web`](https://npmjs.com/package/@aminnairi/rpc-web)
+- [`@aminnairi/react-signal`](https://npmjs.com/package/@aminnairi/react-signal)
+- [`Material UI`](http://mui.com/material-ui)
+
 ### Requirements
 
 - [Docker](https://docker.com/)
