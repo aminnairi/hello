@@ -54,12 +54,14 @@ export const Applications = () => {
       url,
       text: `Navigate to ${title}: ${url}`,
     }).then(() => {
+      vibrate();
       openSuccessNotification("Successfully shared link!");
     }).catch(error => {
+      errorVibration();
       openErrorNotification("Failed to share link");
       console.error(error);
     });
-  }, [openErrorNotification, openSuccessNotification]);
+  }, [errorVibration, openErrorNotification, openSuccessNotification, vibrate]);
 
   return (
     <Fragment>
