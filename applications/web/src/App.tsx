@@ -10,8 +10,6 @@ import { useSearch } from "./hooks/useSearch";
 import { useTheme } from "./hooks/useTheme";
 import { TopBar } from "./components/TopBar";
 import { Sidebar } from "./components/Sidebar";
-import { DateTime } from "./components/DateTime";
-import { Weather } from "./components/Weather";
 import { Cryptos } from "./components/Cryptos";
 import { Applications } from "./components/Applications";
 import { useMode } from "./hooks/useMode";
@@ -92,8 +90,6 @@ function App() {
         <TopBar />
         <Sidebar />
         <Stack paddingTop="80px" justifyContent="center" minHeight="80vh" spacing={3}>
-          <DateTime />
-          <Weather />
           <Cryptos />
           <Applications />
           {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
