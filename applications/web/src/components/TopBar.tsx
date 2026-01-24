@@ -146,7 +146,7 @@ export const TopBar = () => {
                 <Menu sx={{ color: theme.palette.common.white }} />
               </IconButton>
             </Tooltip>
-            <Typography align="center" variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
+            <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
               Hello
             </Typography>
             <Tooltip title="Logout">
