@@ -33,11 +33,6 @@ touch settings.json
 
 ```json
 {
-  "authentication": {
-    "userName": "admin",
-    "hashedPassword": "$2b$10$...",
-    "jsonWebTokenSecret": "your-secret-key"
-  },
   "applications": [
     {
       "name": "Excalidraw",
