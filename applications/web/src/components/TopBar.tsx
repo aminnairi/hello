@@ -1,16 +1,18 @@
-import { Fragment, useCallback, useEffect, type ChangeEvent, type KeyboardEvent } from "react";
+import { Fragment, useCallback, useEffect, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { AppBar, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
 import { useToken } from "../hooks/useToken";
 import { useMode } from "../hooks/useMode";
 import { useSearch } from "../hooks/useSearch";
 import { useDrawer } from "../hooks/useDrawer";
 import { useApplications } from "../hooks/useApplications";
-import { ArrowBack, BrightnessAuto, Close, DarkMode, LightMode, Logout, Search, Menu } from "@mui/icons-material";
+import { ArrowBack, BrightnessAuto, Close, DarkMode, LightMode, Logout, Search, Menu, Wifi, WifiOff } from "@mui/icons-material";
 import { useCryptos } from "../hooks/useCryptos";
 import { useWeather } from "../hooks/useWeather";
 import { useTheme } from "../hooks/useTheme";
+import { useNotification } from "../hooks/useNotification";
 
 export const TopBar = () => {
+  const [offline, setOffline] = useState(false);
   const { clearToken } = useToken();
   const { mode, toggleMode } = useMode();
   const { searchOpened, setSearch, search, clearSearch, openSearch, closeSearch, searchRef } = useSearch();
@@ -19,6 +21,7 @@ export const TopBar = () => {
   const { filteredCryptos, clearCryptos } = useCryptos();
   const { clearWeather } = useWeather();
   const { theme } = useTheme();
+  const { openSuccessNotification, openErrorNotification } = useNotification();
 
   const withVibration = useCallback(<Input, Output>(fn: (...input: Input[]) => Output) => {
     return (...input: Input[]): Output => {
@@ -63,7 +66,6 @@ export const TopBar = () => {
     openSearch();
   }, [openSearch]);
 
-
   const onArrowLeftIconButtonClick = useCallback(() => {
     closeSearch();
     clearSearch();
@@ -101,6 +103,31 @@ export const TopBar = () => {
       searchRef.current?.focus();
     }
   }, [searchOpened, searchRef]);
+
+  useEffect(() => {
+    const onWindowOnline = () => {
+      setOffline(previouslyOffline => {
+        if (previouslyOffline) {
+          openSuccessNotification("Back online!");
+        }
+
+        return false;
+      });
+    }
+
+    const onWindowOffline = () => {
+      openErrorNotification("You are offline");
+      setOffline(true);
+    };
+
+    window.addEventListener("online", onWindowOnline);
+    window.addEventListener("offline", onWindowOffline);
+
+    return () => {
+      window.removeEventListener("online", onWindowOnline);
+      window.removeEventListener("offline", onWindowOffline);
+    };
+  }, [openErrorNotification, openSuccessNotification]);
 
   return (
     <AppBar position="fixed">
@@ -149,6 +176,15 @@ export const TopBar = () => {
             <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
               Hello
             </Typography>
+            <Tooltip title="Connectivity">
+              <IconButton>
+                {offline ? (
+                  <WifiOff sx={{ color: theme.palette.common.white }} />
+                ) : (
+                  <Wifi sx={{ color: theme.palette.common.white }} />
+                )}
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Logout">
               <IconButton onClick={withVibration(onLogoutButtonClick)}>
                 <Logout sx={{ color: theme.palette.common.white }} />
