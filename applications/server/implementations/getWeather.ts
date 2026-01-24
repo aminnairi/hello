@@ -4,7 +4,7 @@ import { implementGetWeather } from "../routes/getWeather";
 import { checkAuthentication } from "../functions/checkAuthentication";
 
 export const getWeather = implementGetWeather(async ({ token }) => {
-  if (!settings.openweathermap) {
+  if (!settings.weather) {
     return {
       success: false,
     };
@@ -19,7 +19,7 @@ export const getWeather = implementGetWeather(async ({ token }) => {
     };
   }
 
-  const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${settings.openweathermap.city}&appid=${settings.openweathermap.apiKey}&units=metric&lang=${settings.openweathermap.language}`);
+  const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${settings.weather.city}&appid=${settings.weather.apiKey}&units=metric&lang=${settings.weather.language}`);
   const json = await response.json();
 
   const schema = z.object({
