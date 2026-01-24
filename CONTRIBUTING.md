@@ -19,7 +19,7 @@ Contribution guildelines
       "url": "https://calendar.google.com/tasks"
     }
   ],
-  "crypto": [
+  "cryptos": [
     {
       "name": "Bitcoin",
       "ticker": "BTC"
