@@ -1,5 +1,5 @@
 import { ContentCopy, OpenInNew, Share } from "@mui/icons-material";
-import { Card, CardActions, CardContent, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
+import { Box, Card, CardActions, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
 import { useApplications } from "../hooks/useApplications";
 import { Fragment, useCallback, useEffect, useMemo } from "react";
 import { useNotification } from "../hooks/useNotification";
@@ -68,61 +68,89 @@ export const Applications = () => {
       <Typography variant="h6">
         Applications
       </Typography>
-      <Zoom appear in={true}>
-        {loadingApplications ? (
+      {loadingApplications ? (
+        <Zoom appear in={true}>
           <Stack spacing={3} paddingBottom={3}>
-            {Array.from(Array(3)).map((_, index) => (
-              <Card>
-                <CardContent>
-                  <Stack direction="row" minWidth="300px" spacing={3} alignItems="center" key={index}>
-                    <Skeleton variant="circular" width="40px" height="40px" />
-                    <Stack flex="1">
-                      <Skeleton variant="text" />
-                      <Skeleton variant="text" />
-                    </Stack>
-                    <Skeleton variant="rectangular" height="40px" width="40px" />
-                  </Stack>
-                </CardContent>
-              </Card>
-            ))}
-          </Stack>
-        ) : (
-          <Zoom appear in={true}>
-            <Stack spacing={3}>
-              {filteredApplications.length === 0 ? (
-                <Typography align="center">
-                  No matching applications.
-                </Typography>
-              ) : filteredApplications.map((application) => (
-                <Card key={application.identifier}>
-                  <CardHeader title={application.name} subheader={new URL(application.url).host} />
-                  <CardActions sx={{ justifyContent: "right" }}>
-                    {canShare && (
-                      <Tooltip title="Share URL">
-                        <IconButton onClick={onShareIconButtonClick(application.name, application.url)}>
-                          <Share />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    {canCopy && (
-                      <Tooltip title="Copy URL">
-                        <IconButton onClick={onCopyIconButtonClick(application.url)}>
-                          <ContentCopy />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    <Tooltip title="Open">
-                      <IconButton onClick={onApplicationListItemButtonClicked(application.url)}>
-                        <OpenInNew />
-                      </IconButton>
-                    </Tooltip>
-                  </CardActions>
+            <Stack spacing={2}>
+              {[1, 2, 3, 4].map((item) => (
+                <Card
+                  key={item}
+                  sx={{
+                    bgcolor: '#1e293b', // Couleur sombre du fond des cartes
+                    p: 2,
+                    borderRadius: 2,
+                    border: '1px solid #334155',
+                    position: 'relative'
+                  }}
+                >
+                  {/* Titre de l'application */}
+                  <Skeleton
+                    variant="text"
+                    sx={{ bgcolor: 'grey.700', width: '30%', height: 30 }}
+                  />
+
+                  {/* URL / Sous-titre */}
+                  <Skeleton
+                    variant="text"
+                    sx={{ bgcolor: 'grey.800', width: '50%', height: 20 }}
+                  />
+
+                  {/* Icônes en bas à droite */}
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
+                    <Skeleton
+                      variant="rectangular"
+                      width={20}
+                      height={20}
+                      sx={{ bgcolor: 'grey.700', borderRadius: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="rectangular"
+                      width={20}
+                      height={20}
+                      sx={{ bgcolor: 'grey.700', borderRadius: 0.5 }}
+                    />
+                  </Box>
                 </Card>
               ))}
             </Stack>
-          </Zoom>
-        )}
-      </Zoom>
+          </Stack>
+        </Zoom>
+      ) : (
+        <Zoom appear in={true}>
+          <Stack spacing={3}>
+            {filteredApplications.length === 0 ? (
+              <Typography align="center">
+                No matching applications.
+              </Typography>
+            ) : filteredApplications.map((application) => (
+              <Card key={application.identifier}>
+                <CardHeader title={application.name} subheader={new URL(application.url).host} />
+                <CardActions sx={{ justifyContent: "right" }}>
+                  {canShare && (
+                    <Tooltip title="Share URL">
+                      <IconButton onClick={onShareIconButtonClick(application.name, application.url)}>
+                        <Share />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  {canCopy && (
+                    <Tooltip title="Copy URL">
+                      <IconButton onClick={onCopyIconButtonClick(application.url)}>
+                        <ContentCopy />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                  <Tooltip title="Open">
+                    <IconButton onClick={onApplicationListItemButtonClicked(application.url)}>
+                      <OpenInNew />
+                    </IconButton>
+                  </Tooltip>
+                </CardActions>
+              </Card>
+            ))}
+          </Stack>
+        </Zoom>
+      )}
     </Fragment>
   );
 };
