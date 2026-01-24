@@ -1,73 +1,77 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { useWeather } from "../hooks/useWeather";
-import { Button, Card, CardActions, CardContent, CardHeader, Skeleton, Stack, Typography, Zoom } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Modal, Stack, Tooltip, Typography } from "@mui/material";
 import { Opacity, Speed, Thermostat } from "@mui/icons-material";
+import { useTheme } from "../hooks/useTheme";
+import { useVibration } from "../hooks/useVibration";
 
 export const Weather = () => {
   const { weather, getWeather, weatherLoading } = useWeather();
+  const { theme } = useTheme();
+  const { withRegularVibration } = useVibration();
+  const [weatherModalOpened, setWeatherModalOpened] = useState(false);
+
+
+  const openWeatherModal = useCallback(() => {
+    setWeatherModalOpened(true);
+  }, []);
+
+  const closeWeatherModal = useCallback(() => {
+    setWeatherModalOpened(false);
+  }, []);
 
   useEffect(() => {
     getWeather();
   }, [getWeather])
 
+  if (weatherLoading) {
+    return null;
+  }
+
   return (
     <Fragment>
-      {weatherLoading ? (
-        <Card>
+      <Tooltip title="Weather">
+        <IconButton onClick={withRegularVibration(openWeatherModal)}>
+          <Typography sx={{ color: theme.palette.common.white }}>
+            {weather.temperature.toFixed(0)} °C
+          </Typography>
+        </IconButton>
+      </Tooltip>
+      <Modal open={weatherModalOpened} onClose={withRegularVibration(closeWeatherModal)} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
+        <Card sx={{ position: "absolute", top: "50%", left: "50%", width: "min(500px, 80vw)", transform: "translate(-50%, -50%)", padding: "10px" }}>
+          <CardHeader title={weather.description} />
           <CardContent>
-            <Stack spacing={3} paddingBottom={3}>
-              <Skeleton variant="text" width="100px" />
-              <Stack spacing={3} justifyContent="center" alignItems="center" direction="row">
-                <Stack spacing={3} justifyContent="center" alignItems="center">
-                  <Thermostat />
-                  <Skeleton variant="text" width="50px" />
-                </Stack>
-                <Stack spacing={3} justifyContent="center" alignItems="center">
-                  <Opacity />
-                  <Skeleton variant="text" width="50px" />
-                </Stack>
-                <Stack spacing={3} justifyContent="center" alignItems="center">
-                  <Speed />
-                  <Skeleton variant="text" width="50px" />
-                </Stack>
+            <Stack spacing={3} justifyContent="center" alignItems="center" direction="row">
+              <Stack spacing={3} justifyContent="center" alignItems="center">
+                <Thermostat />
+                <Typography variant="body1" align="center">
+                  {weather.temperature}°C
+                </Typography>
+              </Stack>
+              <Stack spacing={3} justifyContent="center" alignItems="center">
+                <Opacity />
+                <Typography variant="body1" align="center">
+                  {weather.humidity} %
+                </Typography>
+              </Stack>
+              <Stack spacing={3} justifyContent="center" alignItems="center">
+                <Speed />
+                <Typography variant="body1" align="center">
+                  {weather.pressure} hPa
+                </Typography>
               </Stack>
             </Stack>
           </CardContent>
+          <CardActions sx={{ justifyContent: "right" }}>
+            <Button onClick={closeWeatherModal} variant="text" size="small" color="error">
+              Close
+            </Button>
+            <Button onClick={() => window.open(`https://openweathermap.org/city/${weather.identifier}`)} variant="contained" size="small">
+              Details
+            </Button>
+          </CardActions>
         </Card>
-      ) : weather && (
-        <Zoom appear in={true}>
-          <Card>
-            <CardHeader title={weather.description} />
-            <CardContent>
-              <Stack spacing={3} justifyContent="center" alignItems="center" direction="row">
-                <Stack spacing={3} justifyContent="center" alignItems="center">
-                  <Thermostat />
-                  <Typography variant="body1" align="center">
-                    {weather.temperature}°C
-                  </Typography>
-                </Stack>
-                <Stack spacing={3} justifyContent="center" alignItems="center">
-                  <Opacity />
-                  <Typography variant="body1" align="center">
-                    {weather.humidity} %
-                  </Typography>
-                </Stack>
-                <Stack spacing={3} justifyContent="center" alignItems="center">
-                  <Speed />
-                  <Typography variant="body1" align="center">
-                    {weather.pressure} hPa
-                  </Typography>
-                </Stack>
-              </Stack>
-            </CardContent>
-            <CardActions>
-              <Button onClick={() => window.open(`https://openweathermap.org/city/${weather.identifier}`)}>
-                Details
-              </Button>
-            </CardActions>
-          </Card>
-        </Zoom>
-      )}
+      </Modal>
     </Fragment>
   );
 };
