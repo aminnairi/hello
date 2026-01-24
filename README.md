@@ -48,7 +48,7 @@ touch settings.json
       "url": "https://calendar.google.com/tasks"
     }
   ],
-  "crypto": [
+  "cryptos": [
     {
       "name": "Bitcoin",
       "ticker": "BTC"
@@ -62,7 +62,7 @@ touch settings.json
       "ticker": "SOL"
     }
   ],
-  "openweathermap": {
+  "weather": {
     "apiKey": "39f89...",
     "city": "Paris",
     "language": "fr"
