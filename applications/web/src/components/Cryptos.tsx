@@ -54,26 +54,23 @@ export const Cryptos = () => {
                 <Card
                   key={item}
                   sx={{
-                    bgcolor: '#1e293b', // Couleur sombre du fond des cartes
+                    bgcolor: '#1e293b',
                     p: 2,
                     borderRadius: 2,
                     border: '1px solid #334155',
                     position: 'relative'
                   }}
                 >
-                  {/* Titre de l'application */}
                   <Skeleton
                     variant="text"
                     sx={{ bgcolor: 'grey.700', width: '30%', height: 30 }}
                   />
 
-                  {/* URL / Sous-titre */}
                   <Skeleton
                     variant="text"
                     sx={{ bgcolor: 'grey.800', width: '50%', height: 20 }}
                   />
 
-                  {/* Icônes en bas à droite */}
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
                     <Skeleton
                       variant="rectangular"
