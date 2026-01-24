@@ -63,7 +63,7 @@ export const Weather = () => {
             </Stack>
           </CardContent>
           <CardActions sx={{ justifyContent: "right" }}>
-            <Button onClick={closeWeatherModal} variant="text" size="small" color="error">
+            <Button onClick={withRegularVibration(closeWeatherModal)} variant="text" size="small" color="error">
               Close
             </Button>
             <Button onClick={() => window.open(`https://openweathermap.org/city/${weather.identifier}`)} variant="contained" size="small">
