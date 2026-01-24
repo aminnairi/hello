@@ -151,7 +151,7 @@ export const TopBar = () => {
             </Typography>
             <Tooltip title="Logout">
               <IconButton onClick={withVibration(onLogoutButtonClick)}>
-                <Logout sx={{ clor: theme.palette.common.white }} />
+                <Logout sx={{ color: theme.palette.common.white }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Search">
