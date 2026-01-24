@@ -1,5 +1,5 @@
 import { ContentCopy, OpenInNew, Share } from "@mui/icons-material";
-import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Link, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
+import { Card, CardActions, CardContent, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
 import { useApplications } from "../hooks/useApplications";
 import { Fragment, useCallback, useEffect, useMemo } from "react";
 import { useNotification } from "../hooks/useNotification";
@@ -21,18 +21,32 @@ export const Applications = () => {
       && typeof window.navigator.clipboard.writeText === "function";
   }, []);
 
+  const vibrate = useCallback(() => {
+    if (typeof window.navigator.vibrate === "function") {
+      window.navigator.vibrate(50);
+    }
+  }, []);
+
+  const errorVibration = useCallback(() => {
+    if (typeof window.navigator.vibrate === "function") {
+      window.navigator.vibrate([200, 100, 200, 100, 200]);
+    }
+  }, []);
+
   const onApplicationListItemButtonClicked = useCallback((url: string) => () => {
     window.open(url);
   }, []);
 
   const onCopyIconButtonClick = useCallback((url: string) => () => {
     navigator.clipboard.writeText(url).then(() => {
+      vibrate();
       openSuccessNotification("URL copied to clipboard!");
     }).catch(error => {
+      errorVibration();
       openErrorNotification("Failed to copy to clipboard");
       console.error(error);
     });
-  }, [openErrorNotification, openSuccessNotification]);
+  }, [errorVibration, openErrorNotification, openSuccessNotification, vibrate]);
 
   const onShareIconButtonClick = useCallback((title: string, url: string) => () => {
     navigator.share({
@@ -107,13 +121,6 @@ export const Applications = () => {
           </Zoom>
         )}
       </Zoom>
-      {!loadingApplications && (
-        <CardActions>
-          <Button component={Link} href="https://selfh.st/apps/" target="blank">
-            More
-          </Button>
-        </CardActions>
-      )}
     </Fragment>
   );
 };
