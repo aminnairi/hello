@@ -10,6 +10,8 @@ import { useCryptos } from "../hooks/useCryptos";
 import { useWeather } from "../hooks/useWeather";
 import { useTheme } from "../hooks/useTheme";
 import { useNotification } from "../hooks/useNotification";
+import { Weather } from "./Weather";
+import { useVibration } from "../hooks/useVibration";
 
 export const TopBar = () => {
   const [offline, setOffline] = useState(false);
@@ -22,15 +24,7 @@ export const TopBar = () => {
   const { clearWeather } = useWeather();
   const { theme } = useTheme();
   const { openSuccessNotification, openErrorNotification } = useNotification();
-
-  const withVibration = useCallback(<Input, Output>(fn: (...input: Input[]) => Output) => {
-    return (...input: Input[]): Output => {
-      if (window.navigator.vibrate) {
-        window.navigator.vibrate(50);
-      }
-      return fn(...input);
-    }
-  }, []);
+  const { withRegularVibration } = useVibration();
 
   const onSearchKeydown = useCallback((event: KeyboardEvent) => {
     if (event.key === "Escape") {
@@ -150,14 +144,14 @@ export const TopBar = () => {
                   },
                   endAdornment: (
                     <Tooltip title="Clearn">
-                      <IconButton onClick={withVibration(onCloseEndAdornmentClick)}>
+                      <IconButton onClick={withRegularVibration(onCloseEndAdornmentClick)}>
                         <Close sx={{ color: theme.palette.common.white }} />
                       </IconButton>
                     </Tooltip>
                   ),
                   startAdornment: (
                     <Tooltip title="Cancel">
-                      <IconButton onClick={withVibration(onArrowLeftIconButtonClick)}>
+                      <IconButton onClick={withRegularVibration(onArrowLeftIconButtonClick)}>
                         <ArrowBack sx={{ color: theme.palette.common.white }} />
                       </IconButton>
                     </Tooltip>
@@ -169,13 +163,14 @@ export const TopBar = () => {
         ) : (
           <Fragment>
             <Tooltip title="About">
-              <IconButton onClick={withVibration(onMenuIconButtonClick)}>
+              <IconButton onClick={withRegularVibration(onMenuIconButtonClick)}>
                 <Menu sx={{ color: theme.palette.common.white }} />
               </IconButton>
             </Tooltip>
             <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
               Hello
             </Typography>
+            <Weather />
             <Tooltip title="Connectivity">
               <IconButton>
                 {offline ? (
@@ -186,17 +181,17 @@ export const TopBar = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="Logout">
-              <IconButton onClick={withVibration(onLogoutButtonClick)}>
+              <IconButton onClick={withRegularVibration(onLogoutButtonClick)}>
                 <Logout sx={{ color: theme.palette.common.white }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Search">
-              <IconButton onClick={withVibration(onSearchIconButtonClick)}>
+              <IconButton onClick={withRegularVibration(onSearchIconButtonClick)}>
                 <Search sx={{ color: theme.palette.common.white }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Toggle">
-              <IconButton onClick={withVibration(onModeIconButtonClick)}>
+              <IconButton onClick={withRegularVibration(onModeIconButtonClick)}>
                 {mode === "light"
                   ? <LightMode sx={{ color: theme.palette.common.white }} />
                   : mode === "dark"

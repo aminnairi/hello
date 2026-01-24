@@ -3,10 +3,12 @@ import { Box, Card, CardActions, CardHeader, IconButton, Skeleton, Stack, Toolti
 import { useApplications } from "../hooks/useApplications";
 import { Fragment, useCallback, useEffect, useMemo } from "react";
 import { useNotification } from "../hooks/useNotification";
+import { useVibration } from "../hooks/useVibration";
 
 export const Applications = () => {
   const { filteredApplications, loadingApplications, getApplications } = useApplications();
   const { openSuccessNotification, openErrorNotification } = useNotification();
+  const { regularVibration, errorVibration } = useVibration();
 
   useEffect(() => {
     getApplications();
@@ -21,32 +23,20 @@ export const Applications = () => {
       && typeof window.navigator.clipboard.writeText === "function";
   }, []);
 
-  const vibrate = useCallback(() => {
-    if (typeof window.navigator.vibrate === "function") {
-      window.navigator.vibrate(50);
-    }
-  }, []);
-
-  const errorVibration = useCallback(() => {
-    if (typeof window.navigator.vibrate === "function") {
-      window.navigator.vibrate([200, 100, 200, 100, 200]);
-    }
-  }, []);
-
   const onApplicationListItemButtonClicked = useCallback((url: string) => () => {
     window.open(url);
   }, []);
 
   const onCopyIconButtonClick = useCallback((url: string) => () => {
     navigator.clipboard.writeText(url).then(() => {
-      vibrate();
+      regularVibration();
       openSuccessNotification("URL copied to clipboard!");
     }).catch(error => {
       errorVibration();
       openErrorNotification("Failed to copy to clipboard");
       console.error(error);
     });
-  }, [errorVibration, openErrorNotification, openSuccessNotification, vibrate]);
+  }, [errorVibration, openErrorNotification, openSuccessNotification, regularVibration]);
 
   const onShareIconButtonClick = useCallback((title: string, url: string) => () => {
     navigator.share({
@@ -54,14 +44,14 @@ export const Applications = () => {
       url,
       text: `Navigate to ${title}: ${url}`,
     }).then(() => {
-      vibrate();
+      regularVibration();
       openSuccessNotification("Successfully shared link!");
     }).catch(error => {
       errorVibration();
       openErrorNotification("Failed to share link");
       console.error(error);
     });
-  }, [errorVibration, openErrorNotification, openSuccessNotification, vibrate]);
+  }, [errorVibration, openErrorNotification, openSuccessNotification, regularVibration]);
 
   return (
     <Fragment>

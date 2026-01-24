@@ -3,39 +3,29 @@ import { useCallback, useEffect } from "react";
 import { useCryptos } from "../hooks/useCryptos";
 import { ContentCopy, OpenInNew } from "@mui/icons-material";
 import { useNotification } from "../hooks/useNotification";
+import { useVibration } from "../hooks/useVibration";
 
 export const Cryptos = () => {
   const { filteredCryptos, loadingCryptos, getCryptos } = useCryptos();
   const { openSuccessNotification, openErrorNotification } = useNotification();
+  const { regularVibration, errorVibration } = useVibration();
 
   const onCryptoListItemButtonClicked = useCallback((symbol: string) => () => {
     window.open(`https://www.binance.com/fr/trade/${symbol}`);
-  }, []);
-
-  const vibrate = useCallback(() => {
-    if (window.navigator.vibrate) {
-      window.navigator.vibrate(50);
-    }
-  }, []);
-
-  const errorVibration = useCallback(() => {
-    if (window.navigator.vibrate) {
-      window.navigator.vibrate([200, 100, 200, 100, 200]);
-    }
   }, []);
 
   const onCopyIconButtonClick = useCallback((symbol: string) => () => {
     if (typeof window.navigator.clipboard === "object" && typeof window.navigator.clipboard.writeText === "function") {
       window.navigator.clipboard.writeText(`https://www.binance.com/fr/trade/${symbol}`).then(() => {
         openSuccessNotification("Copied to clipboard");
-        vibrate();
+        regularVibration();
       }).catch(error => {
         openErrorNotification("Failed to copy to clipboard");
         errorVibration();
         console.error(error);
       });
     }
-  }, [errorVibration, openErrorNotification, openSuccessNotification, vibrate]);
+  }, [errorVibration, openErrorNotification, openSuccessNotification, regularVibration]);
 
   useEffect(() => {
     getCryptos();
