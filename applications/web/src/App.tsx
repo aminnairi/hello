@@ -14,6 +14,7 @@ import { Cryptos } from "./components/Cryptos";
 import { Applications } from "./components/Applications";
 import { useMode } from "./hooks/useMode";
 import { useDrawer } from "./hooks/useDrawer";
+import { useToken } from "./hooks/useToken";
 
 function App() {
   const { filteredApplications } = useApplications();
@@ -22,6 +23,7 @@ function App() {
   const { theme } = useTheme();
   const { toggleMode } = useMode();
   const { toggleDrawer } = useDrawer();
+  const { token } = useToken();
 
   const openSearchEngine = useCallback(() => {
     window.open(`https://google.com/search?q=${search}`);
@@ -29,6 +31,10 @@ function App() {
 
   useEffect(() => {
     const onWindowKeydown = (event: globalThis.KeyboardEvent) => {
+      if (token.trim().length === 0) {
+        return;
+      }
+
       if (event.key === "t") {
         if (searchOpened) {
           return;
@@ -81,7 +87,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", onWindowKeydown);
     };
-  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode]);
+  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode, token]);
 
   return (
     <Container maxWidth="xs" sx={{ paddingBottom: "80px" }}>
