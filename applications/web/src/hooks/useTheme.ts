@@ -1,10 +1,12 @@
 import { createTheme, useMediaQuery } from "@mui/material";
 import { useMemo } from "react";
 import { useMode } from "./useMode";
+import { useScroll } from "./useScroll";
 
 export const useTheme = () => {
   const { mode } = useMode();
   const isDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  const { scrolledTop } = useScroll();
 
   const theme = useMemo(() => {
     const lightTheme = createTheme({
@@ -75,7 +77,24 @@ export const useTheme = () => {
     return lightTheme;
   }, [isDarkMode, mode]);
 
+  const color = useMemo(() => {
+    if (mode === "light" || mode === "auto" && !isDarkMode) {
+      if (scrolledTop) {
+        console.log("HERE");
+        return theme.palette.common.black;
+      }
+
+      return theme.palette.common.white;
+    }
+
+    if (mode === "dark" || mode === "auto" && isDarkMode) {
+      return theme.palette.common.white;
+    }
+  }, [mode, isDarkMode, scrolledTop, theme.palette.common.white, theme.palette.common.black]);
+
   return {
     theme,
+    isDarkMode,
+    color
   };
 };
