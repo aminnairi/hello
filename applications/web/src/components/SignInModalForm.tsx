@@ -40,6 +40,8 @@ export const SignInModalForm = () => {
           return;
         }
 
+        setUserName("");
+        setPassword("");
         openSuccessNotification("Successfully signed in!");
         setToken(response.token);
       }).finally(() => {
