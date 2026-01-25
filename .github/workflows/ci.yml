@@ -9,15 +9,16 @@ jobs:
     steps:
       - name: Checkout the project
         uses: actions/checkout@v5
-      - name: Start the Docker Compose services
-        run: docker compose up -d
-      - name: Install the dependencies
-        run: docker compose exec hello-server npm i
-      - name: Audit Node.js packages
-        run: docker compose exec hello-server npm audit
-      - name: Build the server application
-        run: docker compose exec hello-server npm -w applications/server run build
-      - name: Build the Web application
-        run: docker compose exec hello-web npm -w applications/web run build
-      - name: Stop the Docker Compose services
-        run: docker compose down --remove-orphans --volumes --timeout 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 25.2.1
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit the dependencies
+        run: npm audit
+      - name: Build the server
+        run: npm -w applications/server run build
+      - name: Build the Web client
+        run: npm -w applications/web run build
