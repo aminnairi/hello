@@ -59,3 +59,21 @@ docker compose up -d
 
 > [!NOTE]
 > Navigate to [localhost](http://localhost) in order to explore the app.
+
+### Stop
+
+```bash
+docker compose down --remove-orphans --volumes --timeout 0
+```
+
+### Build
+
+```bash
+docker compose -f compose.build.yml build
+```
+
+### Push
+
+```bash
+docker compose -f compose.build.yml push
+```
