@@ -391,6 +391,10 @@ The `city` property allow you to define the city for which the weather data will
 }
 ```
 
+## Changelog
+
+See [`CHANGELOG.md`](./CHANGELOG.md).
+
 ## Contributing
 
 See [`CONTRIBUTING.md`](./CONTRIBUTING.md).
