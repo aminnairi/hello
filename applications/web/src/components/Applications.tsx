@@ -1,5 +1,5 @@
 import { ContentCopy, PhoneIphone, Share } from "@mui/icons-material";
-import { Box, Card, CardActionArea, CardActions, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
+import { Box, Card, CardActionArea, CardActions, CardHeader, Grid, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
 import { useApplications } from "../hooks/useApplications";
 import { Fragment, useCallback, useEffect, useMemo } from "react";
 import { useNotification } from "../hooks/useNotification";
@@ -82,38 +82,40 @@ export const Applications = () => {
         </Zoom>
       ) : (
         <Zoom appear in={true}>
-          <Stack spacing={3}>
+          <Grid container spacing={3}>
             {filteredApplications.length === 0 ? (
               <Typography align="center">
                 No matching applications.
               </Typography>
             ) : filteredApplications.map((application) => (
-              <Card key={application.identifier} raised>
-                <CardActionArea onClick={onApplicationListItemButtonClicked(application.url)}>
-                  <CardHeader
-                    avatar={<PhoneIphone />}
-                    title={application.name}
-                    subheader={new URL(application.url).host} />
-                  <CardActions sx={{ justifyContent: "right" }}>
-                    {canShare && (
-                      <Tooltip title="Share URL">
-                        <IconButton onClick={onShareIconButtonClick(application.name, application.url)}>
-                          <Share />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                    {canCopy && (
-                      <Tooltip title="Copy URL">
-                        <IconButton onClick={onCopyIconButtonClick(application.url)}>
-                          <ContentCopy />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  </CardActions>
-                </CardActionArea>
-              </Card>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <Card key={application.identifier} raised>
+                  <CardActionArea onClick={onApplicationListItemButtonClicked(application.url)}>
+                    <CardHeader
+                      avatar={<PhoneIphone />}
+                      title={application.name}
+                      subheader={new URL(application.url).host} />
+                    <CardActions sx={{ justifyContent: "right" }}>
+                      {canShare && (
+                        <Tooltip title="Share URL">
+                          <IconButton onClick={onShareIconButtonClick(application.name, application.url)}>
+                            <Share />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                      {canCopy && (
+                        <Tooltip title="Copy URL">
+                          <IconButton onClick={onCopyIconButtonClick(application.url)}>
+                            <ContentCopy />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </CardActions>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             ))}
-          </Stack>
+          </Grid>
         </Zoom>
       )}
     </Fragment>

@@ -90,7 +90,7 @@ function App() {
   }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode, token]);
 
   return (
-    <Container maxWidth="xs" sx={{ paddingBottom: "80px" }}>
+    <Container sx={{ paddingBottom: "80px" }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <TopBar />

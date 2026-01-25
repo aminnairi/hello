@@ -1,4 +1,4 @@
-import { Box, Card, CardActionArea, CardActions, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
+import { Box, Card, CardActionArea, CardActions, CardHeader, Grid, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { useCryptos } from "../hooks/useCryptos";
 import { ContentCopy, StackedLineChart } from "@mui/icons-material";
@@ -60,30 +60,32 @@ export const Cryptos = () => {
         </Zoom>
       ) : (
         <Zoom appear in={true}>
-          <Stack spacing={3}>
+          <Grid container spacing={3}>
             {filteredCryptos.length === 0 ? (
               <Typography align="center">
                 No matching cryptos.
               </Typography>
             ) : filteredCryptos.map((crypto, index) => (
-              <Card key={index} raised>
-                <CardActionArea onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
-                  <CardHeader
-                    avatar={<StackedLineChart />}
-                    title={crypto.symbol}
-                    subheader={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)}
-                  />
-                  <CardActions sx={{ justifyContent: "right" }}>
-                    <Tooltip title="Open in Binance">
-                      <IconButton onClick={onCopyIconButtonClick(crypto.symbol)} size="small">
-                        <ContentCopy />
-                      </IconButton>
-                    </Tooltip>
-                  </CardActions>
-                </CardActionArea>
-              </Card>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <Card key={index} raised>
+                  <CardActionArea onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
+                    <CardHeader
+                      avatar={<StackedLineChart />}
+                      title={crypto.symbol}
+                      subheader={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)}
+                    />
+                    <CardActions sx={{ justifyContent: "right" }}>
+                      <Tooltip title="Open in Binance">
+                        <IconButton onClick={onCopyIconButtonClick(crypto.symbol)} size="small">
+                          <ContentCopy />
+                        </IconButton>
+                      </Tooltip>
+                    </CardActions>
+                  </CardActionArea>
+                </Card>
+              </Grid>
             ))}
-          </Stack>
+          </Grid>
         </Zoom>
       )}
     </Stack>
