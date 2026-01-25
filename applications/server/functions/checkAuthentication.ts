@@ -1,4 +1,4 @@
-import { Settings } from "../schema";
+import type { Settings } from "../schema";
 import jsonwebtoken from "jsonwebtoken";
 
 export class AuthenticationError extends Error {
