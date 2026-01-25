@@ -45,6 +45,8 @@ function App() {
           return;
         }
 
+        event.preventDefault();
+        event.stopPropagation();
         logout();
         return;
       }
