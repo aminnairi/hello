@@ -2,6 +2,7 @@
   "private": true,
   "type": "module",
   "name": "@hello/server",
+  "version": "1.0.0",
   "scripts": {
     "dev": "rolldown --watch --config rolldown.config.ts",
     "build": "rolldown --config rolldown.config.ts",

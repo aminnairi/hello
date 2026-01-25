@@ -13,7 +13,7 @@ FROM node:25.2.1-alpine3.22 AS server
 LABEL org.opencontainers.image.authors="Amin NAIRI"
 LABEL org.opencontainers.image.source="https://github.com/aminnairi/hello"
 LABEL org.opencontainers.image.description="Web application for hello"
-LABEL version="0.1.0"
+LABEL version="1.0.0"
 
 USER node
 
@@ -35,7 +35,7 @@ FROM node:25.2.1-alpine3.22 AS web
 LABEL org.opencontainers.image.authors="Amin NAIRI"
 LABEL org.opencontainers.image.source="https://github.com/aminnairi/hello"
 LABEL org.opencontainers.image.description="Server for hello"
-LABEL version="0.1.0"
+LABEL version="1.0.0"
 
 USER node
 

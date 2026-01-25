@@ -6,6 +6,7 @@ All versions marked with a green check mark are supported by backport security p
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.x.x   | :white_check_mark: |
 | 0.1.x   | :white_check_mark: |
 
 ## Reporting a Vulnerability
