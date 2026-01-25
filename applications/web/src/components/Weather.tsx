@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { useWeather } from "../hooks/useWeather";
-import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Modal, Stack, Tooltip, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardHeader, IconButton, Modal, Stack, Tooltip, Typography, Zoom } from "@mui/material";
 import { Opacity, Speed, Thermostat } from "@mui/icons-material";
 import { useTheme } from "../hooks/useTheme";
 import { useVibration } from "../hooks/useVibration";
@@ -29,13 +29,15 @@ export const Weather = () => {
 
   return (
     <Fragment>
-      <Tooltip title="Weather">
-        <IconButton onClick={withRegularVibration(openWeatherModal)}>
-          <Typography sx={{ color }}>
-            {weather.temperature.toFixed(0)} °C
-          </Typography>
-        </IconButton>
-      </Tooltip>
+      <Zoom appear in={true}>
+        <Tooltip title="Weather">
+          <IconButton onClick={withRegularVibration(openWeatherModal)}>
+            <Typography sx={{ color }}>
+              {weather.temperature.toFixed(0)} °C
+            </Typography>
+          </IconButton>
+        </Tooltip>
+      </Zoom>
       <Modal open={weatherModalOpened} onClose={withRegularVibration(closeWeatherModal)} slotProps={{ backdrop: { sx: { backdropFilter: "blur(5px)" } } }}>
         <Card sx={{ position: "absolute", top: "50%", left: "50%", width: "min(500px, 80vw)", transform: "translate(-50%, -50%)", padding: "10px" }}>
           <CardHeader title={weather.description} />
