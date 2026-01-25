@@ -1,32 +1,30 @@
 import { Fragment, useCallback, useEffect, useMemo, useState, type ChangeEvent, type KeyboardEvent } from "react";
 import { AppBar, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
-import { useToken } from "../hooks/useToken";
 import { useMode } from "../hooks/useMode";
 import { useSearch } from "../hooks/useSearch";
 import { useDrawer } from "../hooks/useDrawer";
 import { useApplications } from "../hooks/useApplications";
 import { ArrowBack, BrightnessAuto, Close, DarkMode, LightMode, Logout, Search, Menu, Wifi, WifiOff } from "@mui/icons-material";
 import { useCryptos } from "../hooks/useCryptos";
-import { useWeather } from "../hooks/useWeather";
 import { useNotification } from "../hooks/useNotification";
 import { Weather } from "./Weather";
 import { useVibration } from "../hooks/useVibration";
 import { useScroll } from "../hooks/useScroll";
 import { useTheme } from "../hooks/useTheme";
+import { useAuthentication } from "../hooks/useAuthentication";
 
 export const TopBar = () => {
   const [offline, setOffline] = useState(false);
-  const { clearToken } = useToken();
   const { mode, toggleMode } = useMode();
   const { searchOpened, setSearch, search, clearSearch, openSearch, closeSearch, searchRef } = useSearch();
   const { openDrawer } = useDrawer();
-  const { filteredApplications, clearApplications } = useApplications();
-  const { filteredCryptos, clearCryptos } = useCryptos();
-  const { clearWeather } = useWeather();
+  const { filteredApplications } = useApplications();
+  const { filteredCryptos } = useCryptos();
   const { openSuccessNotification, openErrorNotification } = useNotification();
   const { withRegularVibration } = useVibration();
   const { scrolledTop } = useScroll();
   const { color } = useTheme();
+  const { logout } = useAuthentication();
 
   const appBarElevation = useMemo(() => {
     return scrolledTop ? 0 : 4;
@@ -96,11 +94,8 @@ export const TopBar = () => {
   }, []);
 
   const onLogoutButtonClick = useCallback(() => {
-    clearToken();
-    clearApplications();
-    clearCryptos();
-    clearWeather();
-  }, [clearApplications, clearCryptos, clearToken, clearWeather]);
+    logout();
+  }, [logout]);
 
   useEffect(() => {
     if (searchOpened) {
