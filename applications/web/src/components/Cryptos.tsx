@@ -1,7 +1,7 @@
-import { Box, Card, CardActions, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
+import { Box, Card, CardActionArea, CardActions, CardHeader, IconButton, Skeleton, Stack, Tooltip, Typography, Zoom } from "@mui/material";
 import { useCallback, useEffect } from "react";
 import { useCryptos } from "../hooks/useCryptos";
-import { ContentCopy, OpenInNew } from "@mui/icons-material";
+import { ContentCopy, StackedLineChart } from "@mui/icons-material";
 import { useNotification } from "../hooks/useNotification";
 import { useVibration } from "../hooks/useVibration";
 
@@ -89,19 +89,20 @@ export const Cryptos = () => {
               </Typography>
             ) : filteredCryptos.map((crypto, index) => (
               <Card key={index}>
-                <CardHeader title={crypto.symbol} subheader={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)} />
-                <CardActions sx={{ justifyContent: "right" }}>
-                  <Tooltip title="Open in Binance">
-                    <IconButton onClick={onCopyIconButtonClick(crypto.symbol)}>
-                      <ContentCopy />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Open in Binance">
-                    <IconButton onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
-                      <OpenInNew />
-                    </IconButton>
-                  </Tooltip>
-                </CardActions>
+                <CardActionArea onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
+                  <CardHeader
+                    avatar={<StackedLineChart />}
+                    title={crypto.symbol}
+                    subheader={new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(crypto.price)}
+                  />
+                  <CardActions sx={{ justifyContent: "right" }}>
+                    <Tooltip title="Open in Binance">
+                      <IconButton onClick={onCopyIconButtonClick(crypto.symbol)} size="small">
+                        <ContentCopy />
+                      </IconButton>
+                    </Tooltip>
+                  </CardActions>
+                </CardActionArea>
               </Card>
             ))}
           </Stack>
