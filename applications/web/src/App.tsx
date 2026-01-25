@@ -17,6 +17,7 @@ import { useDrawer } from "./hooks/useDrawer";
 import { useToken } from "./hooks/useToken";
 import { Filters } from "./components/Filters";
 import { useWeather } from "./hooks/useWeather";
+import { useAuthentication } from "./hooks/useAuthentication";
 
 function App() {
   const { filteredApplications } = useApplications();
@@ -27,6 +28,7 @@ function App() {
   const { toggleDrawer } = useDrawer();
   const { token } = useToken();
   const { toggleWeatherModalOpened } = useWeather();
+  const { logout } = useAuthentication();
 
   const openSearchEngine = useCallback(() => {
     window.open(`https://google.com/search?q=${search}`);
@@ -35,6 +37,15 @@ function App() {
   useEffect(() => {
     const onWindowKeydown = (event: globalThis.KeyboardEvent) => {
       if (token.trim().length === 0) {
+        return;
+      }
+
+      if (event.key === "l") {
+        if (searchOpened) {
+          return;
+        }
+
+        logout();
         return;
       }
 
@@ -99,7 +110,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", onWindowKeydown);
     };
-  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode, toggleWeatherModalOpened, token]);
+  }, [clearSearch, closeSearch, logout, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode, toggleWeatherModalOpened, token]);
 
   return (
     <Container sx={{ paddingBottom: "80px" }}>
