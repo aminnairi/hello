@@ -2,12 +2,20 @@ import { useCallback, useState } from "react";
 import { useWeatherState } from "../states/useWeatherState";
 import { useRequest } from "./useRequest";
 import { useToken } from "./useToken";
+import { useWeatherModalOpenedState } from "../states/useWeatherModalOpenedState";
 
 export const useWeather = () => {
+  const [weatherModalOpened, setWeatherModalOpened] = useWeatherModalOpenedState();
   const [weather, setWeather] = useWeatherState();
   const [weatherLoading, setWeatherLoading] = useState(true);
   const { request } = useRequest();
   const { token } = useToken();
+
+  const toggleWeatherModalOpened = useCallback(() => {
+    setWeatherModalOpened(previouslyOpenedWeatherModal => {
+      return !previouslyOpenedWeatherModal;
+    });
+  }, [setWeatherModalOpened]);
 
   const clearWeather = useCallback(() => {
     setWeather({
@@ -19,7 +27,6 @@ export const useWeather = () => {
       temperature: 0,
     });
   }, [setWeather]);
-
 
   const getWeather = useCallback(() => {
     setWeatherLoading(true);
@@ -46,8 +53,11 @@ export const useWeather = () => {
   return {
     weather,
     weatherLoading,
+    weatherModalOpened,
+    setWeatherModalOpened,
     setWeather,
     clearWeather,
     getWeather,
+    toggleWeatherModalOpened,
   };
 };
