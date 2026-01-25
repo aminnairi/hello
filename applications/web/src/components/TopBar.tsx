@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useMemo, useState, type ChangeEvent, type KeyboardEvent } from "react";
-import { AppBar, IconButton, TextField, Toolbar, Tooltip, Typography, useScrollTrigger } from "@mui/material";
+import { AppBar, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
 import { useToken } from "../hooks/useToken";
 import { useMode } from "../hooks/useMode";
 import { useSearch } from "../hooks/useSearch";
@@ -8,10 +8,11 @@ import { useApplications } from "../hooks/useApplications";
 import { ArrowBack, BrightnessAuto, Close, DarkMode, LightMode, Logout, Search, Menu, Wifi, WifiOff } from "@mui/icons-material";
 import { useCryptos } from "../hooks/useCryptos";
 import { useWeather } from "../hooks/useWeather";
-import { useTheme } from "../hooks/useTheme";
 import { useNotification } from "../hooks/useNotification";
 import { Weather } from "./Weather";
 import { useVibration } from "../hooks/useVibration";
+import { useScroll } from "../hooks/useScroll";
+import { useTheme } from "../hooks/useTheme";
 
 export const TopBar = () => {
   const [offline, setOffline] = useState(false);
@@ -22,23 +23,18 @@ export const TopBar = () => {
   const { filteredApplications, clearApplications } = useApplications();
   const { filteredCryptos, clearCryptos } = useCryptos();
   const { clearWeather } = useWeather();
-  const { theme } = useTheme();
   const { openSuccessNotification, openErrorNotification } = useNotification();
   const { withRegularVibration } = useVibration();
-
-  const initialScroll = useScrollTrigger({
-    target: window,
-    threshold: 0,
-    disableHysteresis: true
-  });
+  const { scrolledTop } = useScroll();
+  const { color } = useTheme();
 
   const appBarElevation = useMemo(() => {
-    return initialScroll ? 4 : 0;
-  }, [initialScroll]);
+    return scrolledTop ? 0 : 4;
+  }, [scrolledTop]);
 
   const appBarBackground = useMemo(() => {
-    return initialScroll ? undefined : "transparent";
-  }, [initialScroll]);
+    return scrolledTop ? "transparent" : undefined;
+  }, [scrolledTop]);
 
   const onSearchKeydown = useCallback((event: KeyboardEvent) => {
     if (event.key === "Escape") {
@@ -154,19 +150,19 @@ export const TopBar = () => {
               slotProps={{
                 input: {
                   sx: {
-                    color: theme.palette.common.white
+                    color
                   },
                   endAdornment: (
                     <Tooltip title="Clearn">
                       <IconButton onClick={withRegularVibration(onCloseEndAdornmentClick)}>
-                        <Close sx={{ color: theme.palette.common.white }} />
+                        <Close sx={{ color }} />
                       </IconButton>
                     </Tooltip>
                   ),
                   startAdornment: (
                     <Tooltip title="Cancel">
                       <IconButton onClick={withRegularVibration(onArrowLeftIconButtonClick)}>
-                        <ArrowBack sx={{ color: theme.palette.common.white }} />
+                        <ArrowBack sx={{ color }} />
                       </IconButton>
                     </Tooltip>
                   )
@@ -178,39 +174,39 @@ export const TopBar = () => {
           <Fragment>
             <Tooltip title="About">
               <IconButton onClick={withRegularVibration(onMenuIconButtonClick)}>
-                <Menu sx={{ color: theme.palette.common.white }} />
+                <Menu sx={{ color }} />
               </IconButton>
             </Tooltip>
-            <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer", color: theme.palette.common.white }}>
+            <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer", color }}>
               Hello
             </Typography>
             <Weather />
             <Tooltip title="Connectivity">
               <IconButton>
                 {offline ? (
-                  <WifiOff sx={{ color: theme.palette.common.white }} />
+                  <WifiOff sx={{ color }} />
                 ) : (
-                  <Wifi sx={{ color: theme.palette.common.white }} />
+                  <Wifi sx={{ color }} />
                 )}
               </IconButton>
             </Tooltip>
             <Tooltip title="Logout">
               <IconButton onClick={withRegularVibration(onLogoutButtonClick)}>
-                <Logout sx={{ color: theme.palette.common.white }} />
+                <Logout sx={{ color }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Search">
               <IconButton onClick={withRegularVibration(onSearchIconButtonClick)}>
-                <Search sx={{ color: theme.palette.common.white }} />
+                <Search sx={{ color }} />
               </IconButton>
             </Tooltip>
             <Tooltip title="Toggle">
               <IconButton onClick={withRegularVibration(onModeIconButtonClick)}>
                 {mode === "light"
-                  ? <LightMode sx={{ color: theme.palette.common.white }} />
+                  ? <LightMode sx={{ color }} />
                   : mode === "dark"
-                    ? <DarkMode sx={{ color: theme.palette.common.white }} />
-                    : <BrightnessAuto sx={{ color: theme.palette.common.white }} />}
+                    ? <DarkMode sx={{ color }} />
+                    : <BrightnessAuto sx={{ color }} />}
               </IconButton>
             </Tooltip>
           </Fragment>

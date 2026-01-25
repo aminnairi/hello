@@ -7,10 +7,9 @@ import { useVibration } from "../hooks/useVibration";
 
 export const Weather = () => {
   const { weather, getWeather, weatherLoading } = useWeather();
-  const { theme } = useTheme();
   const { withRegularVibration } = useVibration();
   const [weatherModalOpened, setWeatherModalOpened] = useState(false);
-
+  const { color } = useTheme();
 
   const openWeatherModal = useCallback(() => {
     setWeatherModalOpened(true);
@@ -32,7 +31,7 @@ export const Weather = () => {
     <Fragment>
       <Tooltip title="Weather">
         <IconButton onClick={withRegularVibration(openWeatherModal)}>
-          <Typography sx={{ color: theme.palette.common.white }}>
+          <Typography sx={{ color }}>
             {weather.temperature.toFixed(0)} °C
           </Typography>
         </IconButton>
