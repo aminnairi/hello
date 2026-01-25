@@ -17,7 +17,7 @@ import { useDrawer } from "./hooks/useDrawer";
 import { useToken } from "./hooks/useToken";
 import { Filters } from "./components/Filters";
 import { useWeather } from "./hooks/useWeather";
-import { useAuthentication } from "./hooks/useAuthentication";
+import { useLogout } from "./hooks/useLogout";
 
 function App() {
   const { filteredApplications } = useApplications();
@@ -28,7 +28,7 @@ function App() {
   const { toggleDrawer } = useDrawer();
   const { token } = useToken();
   const { toggleWeatherModalOpened } = useWeather();
-  const { logout } = useAuthentication();
+  const { logout } = useLogout();
 
   const openSearchEngine = useCallback(() => {
     window.open(`https://google.com/search?q=${search}`);

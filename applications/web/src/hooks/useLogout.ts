@@ -4,7 +4,7 @@ import { useApplications } from "./useApplications";
 import { useCryptos } from "./useCryptos";
 import { useWeather } from "./useWeather";
 
-export const useAuthentication = () => {
+export const useLogout = () => {
   const { clearToken } = useToken();
   const { clearApplications } = useApplications();
   const { clearCryptos } = useCryptos();

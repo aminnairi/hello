@@ -11,7 +11,7 @@ import { Weather } from "./Weather";
 import { useVibration } from "../hooks/useVibration";
 import { useScroll } from "../hooks/useScroll";
 import { useTheme } from "../hooks/useTheme";
-import { useAuthentication } from "../hooks/useAuthentication";
+import { useLogout } from "../hooks/useLogout";
 
 export const TopBar = () => {
   const [offline, setOffline] = useState(false);
@@ -24,7 +24,7 @@ export const TopBar = () => {
   const { withRegularVibration } = useVibration();
   const { scrolledTop } = useScroll();
   const { color } = useTheme();
-  const { logout } = useAuthentication();
+  const { logout } = useLogout();
 
   const appBarElevation = useMemo(() => {
     return scrolledTop ? 0 : 4;
