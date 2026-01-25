@@ -153,7 +153,7 @@ export const TopBar = () => {
                     color
                   },
                   endAdornment: (
-                    <Tooltip title="Clearn">
+                    <Tooltip title="Clear">
                       <IconButton onClick={withRegularVibration(onCloseEndAdornmentClick)}>
                         <Close sx={{ color }} />
                       </IconButton>
@@ -172,7 +172,7 @@ export const TopBar = () => {
           </Fragment>
         ) : (
           <Fragment>
-            <Tooltip title="About">
+            <Tooltip title="Menu (m)">
               <IconButton onClick={withRegularVibration(onMenuIconButtonClick)}>
                 <Menu sx={{ color }} />
               </IconButton>
@@ -190,17 +190,17 @@ export const TopBar = () => {
                 )}
               </IconButton>
             </Tooltip>
-            <Tooltip title="Logout">
+            <Tooltip title="Logout (l)">
               <IconButton onClick={withRegularVibration(onLogoutButtonClick)}>
                 <Logout sx={{ color }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Search">
+            <Tooltip title="Search (/)">
               <IconButton onClick={withRegularVibration(onSearchIconButtonClick)}>
                 <Search sx={{ color }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Toggle">
+            <Tooltip title="Theme (t)">
               <IconButton onClick={withRegularVibration(onModeIconButtonClick)}>
                 {mode === "light"
                   ? <LightMode sx={{ color }} />
