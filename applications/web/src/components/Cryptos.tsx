@@ -38,25 +38,25 @@ export const Cryptos = () => {
       </Typography>
       {loadingCryptos ? (
         <Zoom appear in={true}>
-          <Stack spacing={3} paddingBottom={3}>
-            <Stack spacing={2}>
-              {[1, 2, 3, 4].map((item) => (
-                <Card raised key={item} sx={{ p: 2, position: 'relative' }}>
-                  <Stack direction="row" spacing={3} alignItems="center">
-                    <Skeleton variant="rectangular" width={20} height={30} />
-                    <Stack width="100%">
-                      <Skeleton variant="text" sx={{ width: '30%', height: 30 }} />
-                      <Skeleton variant="text" sx={{ width: '50%', height: 20 }} />
-                    </Stack>
-                  </Stack>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
-                    <Skeleton variant="rectangular" width={20} height={20} />
-                    <Skeleton variant="rectangular" width={20} height={20} />
-                  </Box>
+          <Grid container spacing={3}>
+            {[1, 2, 3, 4, 5, 6].map((element) => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={element}>
+                <Card raised>
+                  <CardHeader
+                    avatar={<Skeleton variant="rectangular" width={20} height={30} />}
+                    title={<Skeleton variant="text" sx={{ width: '30%', height: 30 }} />}
+                    subheader={<Skeleton variant="text" sx={{ width: '30%', height: 30 }} />}
+                  />
+                  <CardActions sx={{ justifyContent: "right" }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
+                      <Skeleton variant="rectangular" width={20} height={20} />
+                      <Skeleton variant="rectangular" width={20} height={20} />
+                    </Box>
+                  </CardActions>
                 </Card>
-              ))}
-            </Stack>
-          </Stack>
+              </Grid>
+            ))}
+          </Grid>
         </Zoom>
       ) : (
         <Zoom appear in={true}>
@@ -65,9 +65,9 @@ export const Cryptos = () => {
               <Typography align="center">
                 No matching cryptos.
               </Typography>
-            ) : filteredCryptos.map((crypto, index) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Card key={index} raised>
+            ) : filteredCryptos.map(crypto => (
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={crypto.symbol}>
+                <Card raised>
                   <CardActionArea onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
                     <CardHeader
                       avatar={<StackedLineChart />}
