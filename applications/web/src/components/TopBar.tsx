@@ -177,7 +177,7 @@ export const TopBar = () => {
                 <Menu sx={{ color }} />
               </IconButton>
             </Tooltip>
-            <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer", color }}>
+            <Typography variant="h6" flex="1" onClick={withRegularVibration(onTitleClick)} sx={{ cursor: "pointer", color }}>
               Hello
             </Typography>
             <Weather />
