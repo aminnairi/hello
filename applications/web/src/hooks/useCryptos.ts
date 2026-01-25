@@ -3,6 +3,7 @@ import { useCryptosState } from "../states/useCryptosState";
 import { useSearch } from "./useSearch";
 import { useRequest } from "./useRequest";
 import { useToken } from "./useToken";
+import { useFilters } from "./useFilters";
 
 export const useCryptos = () => {
   const [cryptos, setCryptos] = useCryptosState();
@@ -10,6 +11,7 @@ export const useCryptos = () => {
   const { search } = useSearch();
   const { request } = useRequest();
   const { token } = useToken();
+  const { filters } = useFilters();
 
   const getCryptos = useCallback(() => {
     setLoadingCryptos(true);
@@ -34,6 +36,10 @@ export const useCryptos = () => {
   }, [request, setCryptos, token]);
 
   const filteredCryptos = useMemo(() => {
+    if (!filters.cryptos) {
+      return [];
+    }
+
     const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
 
     return cryptos.filter(crypto => {
@@ -43,7 +49,7 @@ export const useCryptos = () => {
         return searchableString.includes(searchWord);
       });
     });
-  }, [cryptos, search]);
+  }, [cryptos, filters.cryptos, search]);
 
   const clearCryptos = useCallback(() => {
     setCryptos([]);
