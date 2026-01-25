@@ -18,6 +18,10 @@ jobs:
         run: npm ci
       - name: Audit the dependencies
         run: npm audit
+      - name: Lint the server
+        run: npm -w applications/server run lint
+      - name: Lint the Web client
+        run: npm -w applications/web run lint
       - name: Build the server
         run: npm -w applications/server run build
       - name: Build the Web client
