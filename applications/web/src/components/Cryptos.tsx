@@ -41,40 +41,17 @@ export const Cryptos = () => {
           <Stack spacing={3} paddingBottom={3}>
             <Stack spacing={2}>
               {[1, 2, 3, 4].map((item) => (
-                <Card
-                  raised
-                  key={item}
-                  sx={{
-                    bgcolor: '#1e293b',
-                    p: 2,
-                    borderRadius: 2,
-                    border: '1px solid #334155',
-                    position: 'relative'
-                  }}
-                >
-                  <Skeleton
-                    variant="text"
-                    sx={{ bgcolor: 'grey.700', width: '30%', height: 30 }}
-                  />
-
-                  <Skeleton
-                    variant="text"
-                    sx={{ bgcolor: 'grey.800', width: '50%', height: 20 }}
-                  />
-
+                <Card raised key={item} sx={{ p: 2, position: 'relative' }}>
+                  <Stack direction="row" spacing={3} alignItems="center">
+                    <Skeleton variant="rectangular" width={20} height={30} />
+                    <Stack width="100%">
+                      <Skeleton variant="text" sx={{ width: '30%', height: 30 }} />
+                      <Skeleton variant="text" sx={{ width: '50%', height: 20 }} />
+                    </Stack>
+                  </Stack>
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, mt: 1 }}>
-                    <Skeleton
-                      variant="rectangular"
-                      width={20}
-                      height={20}
-                      sx={{ bgcolor: 'grey.700', borderRadius: 0.5 }}
-                    />
-                    <Skeleton
-                      variant="rectangular"
-                      width={20}
-                      height={20}
-                      sx={{ bgcolor: 'grey.700', borderRadius: 0.5 }}
-                    />
+                    <Skeleton variant="rectangular" width={20} height={20} />
+                    <Skeleton variant="rectangular" width={20} height={20} />
                   </Box>
                 </Card>
               ))}
