@@ -3,6 +3,7 @@ import { useApplicationsState } from "../states/useApplicationsState";
 import { useSearch } from "./useSearch";
 import { useToken } from "./useToken";
 import { useRequest } from "./useRequest";
+import { useFilters } from "./useFilters";
 
 export const useApplications = () => {
   const { search } = useSearch();
@@ -10,6 +11,7 @@ export const useApplications = () => {
   const [loadingApplications, setLoadingApplications] = useState(true);
   const { request } = useRequest();
   const { token } = useToken();
+  const { filters } = useFilters();
 
   const getApplications = useCallback(() => {
     setLoadingApplications(true);
@@ -34,6 +36,10 @@ export const useApplications = () => {
   }, [request, setApplications, token]);
 
   const filteredApplications = useMemo(() => {
+    if (!filters.applications) {
+      return [];
+    }
+
     const searchWords = search.trim().toLowerCase().split(/\s+/).filter(word => word !== "");
 
     return applications.filter(application => {
@@ -43,7 +49,7 @@ export const useApplications = () => {
         return applicationName.includes(searchWord);
       });
     });
-  }, [applications, search]);
+  }, [applications, filters.applications, search]);
 
   const clearApplications = useCallback(() => {
     setApplications([]);
