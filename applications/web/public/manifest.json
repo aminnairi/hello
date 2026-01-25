@@ -10,7 +10,7 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "sizes": "512x512",
+      "sizes": "1024x1024",
       "src": "/icon.png",
       "type": "image/png",
       "purpose": "any"
@@ -18,18 +18,32 @@
   ],
   "screenshots": [
     {
-      "sizes": "1354x1561",
-      "src": "/screenshot-wide.png",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Desktop home screen"
-    },
-    {
-      "sizes": "750x1334",
-      "src": "/screenshot-narrow.png",
+      "sizes": "1290x2796",
+      "src": "/screenshot-narrow-dark.png",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Mobile home screen"
+      "label": "Narrow Dark"
+    },
+    {
+      "sizes": "1290x2796",
+      "src": "/screenshot-narrow-light.png",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Narrow Light"
+    },
+    {
+      "sizes": "1824x2736",
+      "src": "/screenshot-wide-dark.png",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wide Dark"
+    },
+    {
+      "sizes": "1824x2736",
+      "src": "/screenshot-wide-light.png",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Wide Light"
     }
   ]
 }
