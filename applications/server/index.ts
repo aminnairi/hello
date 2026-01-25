@@ -4,6 +4,7 @@ import { getCryptos } from "./implementations/getCryptos";
 import { getWeather } from "./implementations/getWeather";
 import { getApplications } from "./implementations/getApplication";
 import { signIn } from "./implementations/signIn";
+import { healthcheck } from "./implementations/healthcheck";
 
 const server = createHTTPServer({
   routes,
@@ -12,6 +13,7 @@ const server = createHTTPServer({
     getCryptos,
     getWeather,
     signIn,
+    healthcheck,
   },
 });
 
