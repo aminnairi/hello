@@ -64,6 +64,7 @@ export const Applications = () => {
             <Stack spacing={2}>
               {[1, 2, 3, 4].map((item) => (
                 <Card
+                  raised
                   key={item}
                   sx={{
                     bgcolor: '#1e293b', // Couleur sombre du fond des cartes
@@ -113,7 +114,7 @@ export const Applications = () => {
                 No matching applications.
               </Typography>
             ) : filteredApplications.map((application) => (
-              <Card key={application.identifier}>
+              <Card key={application.identifier} raised>
                 <CardActionArea onClick={onApplicationListItemButtonClicked(application.url)}>
                   <CardHeader
                     avatar={<PhoneIphone />}

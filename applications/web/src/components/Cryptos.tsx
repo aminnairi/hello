@@ -42,6 +42,7 @@ export const Cryptos = () => {
             <Stack spacing={2}>
               {[1, 2, 3, 4].map((item) => (
                 <Card
+                  raised
                   key={item}
                   sx={{
                     bgcolor: '#1e293b',
@@ -88,7 +89,7 @@ export const Cryptos = () => {
                 No matching cryptos.
               </Typography>
             ) : filteredCryptos.map((crypto, index) => (
-              <Card key={index}>
+              <Card key={index} raised>
                 <CardActionArea onClick={onCryptoListItemButtonClicked(crypto.symbol)}>
                   <CardHeader
                     avatar={<StackedLineChart />}
