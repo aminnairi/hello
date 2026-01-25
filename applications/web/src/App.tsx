@@ -15,6 +15,8 @@ import { Applications } from "./components/Applications";
 import { useMode } from "./hooks/useMode";
 import { useDrawer } from "./hooks/useDrawer";
 import { useToken } from "./hooks/useToken";
+import { Filters } from "./components/Filters";
+import { useWeather } from "./hooks/useWeather";
 
 function App() {
   const { filteredApplications } = useApplications();
@@ -24,6 +26,7 @@ function App() {
   const { toggleMode } = useMode();
   const { toggleDrawer } = useDrawer();
   const { token } = useToken();
+  const { toggleWeatherModalOpened } = useWeather();
 
   const openSearchEngine = useCallback(() => {
     window.open(`https://google.com/search?q=${search}`);
@@ -32,6 +35,15 @@ function App() {
   useEffect(() => {
     const onWindowKeydown = (event: globalThis.KeyboardEvent) => {
       if (token.trim().length === 0) {
+        return;
+      }
+
+      if (event.key === "w") {
+        if (searchOpened) {
+          return;
+        }
+
+        toggleWeatherModalOpened();
         return;
       }
 
@@ -87,7 +99,7 @@ function App() {
     return () => {
       window.removeEventListener("keydown", onWindowKeydown);
     };
-  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode, token]);
+  }, [clearSearch, closeSearch, openSearch, searchOpened, searchRef, toggleDrawer, toggleMode, toggleWeatherModalOpened, token]);
 
   return (
     <Container sx={{ paddingBottom: "80px" }}>
@@ -96,6 +108,7 @@ function App() {
         <TopBar />
         <Sidebar />
         <Stack paddingTop="80px" justifyContent="center" minHeight="80vh" spacing={3}>
+          <Filters />
           <Cryptos />
           <Applications />
           {searchOpened && [...filteredApplications, ...filteredCryptos].length === 0 && (
