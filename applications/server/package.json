@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "rolldown --watch --config rolldown.config.ts",
     "build": "rolldown --config rolldown.config.ts",
+    "lint": "tsc --noEmit",
     "start": "node dist/index.js"
   },
   "dependencies": {
