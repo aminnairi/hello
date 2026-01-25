@@ -1,5 +1,5 @@
-import { Fragment, useCallback, useEffect, useState, type ChangeEvent, type KeyboardEvent } from "react";
-import { AppBar, IconButton, TextField, Toolbar, Tooltip, Typography } from "@mui/material";
+import { Fragment, useCallback, useEffect, useMemo, useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { AppBar, IconButton, TextField, Toolbar, Tooltip, Typography, useScrollTrigger } from "@mui/material";
 import { useToken } from "../hooks/useToken";
 import { useMode } from "../hooks/useMode";
 import { useSearch } from "../hooks/useSearch";
@@ -25,6 +25,20 @@ export const TopBar = () => {
   const { theme } = useTheme();
   const { openSuccessNotification, openErrorNotification } = useNotification();
   const { withRegularVibration } = useVibration();
+
+  const initialScroll = useScrollTrigger({
+    target: window,
+    threshold: 0,
+    disableHysteresis: true
+  });
+
+  const appBarElevation = useMemo(() => {
+    return initialScroll ? 4 : 0;
+  }, [initialScroll]);
+
+  const appBarBackground = useMemo(() => {
+    return initialScroll ? undefined : "transparent";
+  }, [initialScroll]);
 
   const onSearchKeydown = useCallback((event: KeyboardEvent) => {
     if (event.key === "Escape") {
@@ -124,7 +138,7 @@ export const TopBar = () => {
   }, [openErrorNotification, openSuccessNotification]);
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" enableColorOnDark elevation={appBarElevation} sx={{ background: appBarBackground, transition: "all 0.15s ease-in-out" }}>
       <Toolbar>
         {searchOpened ? (
           <Fragment>
@@ -167,7 +181,7 @@ export const TopBar = () => {
                 <Menu sx={{ color: theme.palette.common.white }} />
               </IconButton>
             </Tooltip>
-            <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer" }}>
+            <Typography variant="h6" flex="1" onClick={onTitleClick} sx={{ cursor: "pointer", color: theme.palette.common.white }}>
               Hello
             </Typography>
             <Weather />
